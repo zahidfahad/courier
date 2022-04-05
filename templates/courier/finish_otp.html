@@ -1,0 +1,46 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div style="display: none;">{{form.receiver}}</div>
+                        <div style="display: none;">{{form.payment}}</div>
+                        <div style="display: none;">{{form.reference_id}}</div>
+                        <div style="display: none;">{{form.receiver_Address}}</div>
+                        <div style="display: none;">{{form.receiver_Contact}}</div>
+                        <div style="display: none;">{{form.receiver_Email}}</div>
+                        <div style="display: none;">{{form.service}}</div>
+                        <div style="display: none;">{{form.product_Type}}</div>
+                        <div style="display: none;">{{form.contents}}</div>
+                        <div style="display: none;">{{form.quantity}}</div>
+                        <div style="display: none;">{{form.package}}</div>
+                        <div style="display: none;">{{form.amount}}</div>
+                        <div style="display: none;">{{form.priority}}</div>
+                        <div style="display: none;">{{form.delivery_time}}</div>
+                        <div style="display: none;">{{form.paid}}</div>
+                        <div style="display: none;">{{form.pick_up_latitude}}</div>
+                        <div style="display: none;">{{form.pick_up_longitude}}</div>
+                        <div style="display: none;">{{form.delivery_latitude}}</div>
+                        <div style="display: none;">{{form.delivery_longitude}}</div>
+                        <div style="display: none;">{{form.driver_longitude}}</div>
+                        <div style="display: none;">{{form.order_otp_user}}</div>
+                        {{form.order_otp_delivery_man|as_crispy_field}}
+                        <input type="submit" class="form-control bg-hover-primary">
+                    </form>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

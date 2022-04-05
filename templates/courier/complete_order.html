@@ -1,0 +1,102 @@
+{% extends '../base.html' %} {% load static %} {% block content %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            {% if messages %}
+            <div class="alert alert-custom alert-light-primary fade show mb-5" role="alert">
+                <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                <div class="alert-text">
+                    <p class="messages">
+                        {% for message in messages %}
+                    <p {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                        {{message}}
+                    </p>
+                    {% endfor %}
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+            <div class="table-responsive">
+                <table id="data-table" class="display table">
+                    <thead>
+                        <tr class="text-center">
+                            <th>Reference Id</th>
+                            <th>Sender</th>
+                            <th>Receiver</th>
+                            <th>Receiver Contact</th>
+                            <th>Receiver Email</th>
+                            <th>Service</th>
+                            <th>Product Type</th>
+                            <th>Contents</th>
+                            <th>Quantity</th>
+                            <th>Payment Method</th>
+                            <th>Priority</th>
+                            <th>Amount</th>
+                            <th>Delivery Status</th>
+                            <th>Delivery Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for object in object_list %}
+                        <tr class="text-center">
+                            <td>{{object.reference_id}}</td>
+                            <td>{{object.user}}</td>
+                            <td>{{object.receiver}}</td>
+                            <td>{{object.receiver_Contact}}</td>
+                            <td>{{object.receiver_Email}}</td>
+                            <td>{{object.service}}</td>
+                            <td>{{object.product_Type}}</td>
+                            <td>{{object.contents}}</td>
+                            <td>{{object.quantity}}</td>
+                            <td>{{object.payment}}</td>
+                            <td>{{object.priority}}</td>
+                            <td>{{object.amount}}</td>
+                            {% if object.delivery_Status == "Complete" %}
+                            <td class="mt-6"><a href="{% url 'order_status_update' object.id %}"
+                                    class="font-weight-bold text-white bg-radial-gradient-success "
+                                    data-toggle="tooltip" title="Change Status"
+                                    style="font-size: 16px;">{{object.delivery_Status}}</a></td>
+                            {% elif object.delivery_Status == "Return" %}
+                            <td class="mt-6"><a href="{% url 'order_status_update' object.id %}"
+                                    class="font-weight-bold text-white bg-radial-gradient-danger" data-toggle="tooltip"
+                                    title="Change Status" style="font-size: 16px;">{{object.delivery_Status}}</a></td>
+                            {% elif object.delivery_Status == "Delivering" %}
+                            <td class="mt-6"><a href="{% url 'order_status_update' object.id %}"
+                                    class="font-weight-bold text-white bg-radial-gradient-info" data-toggle="tooltip"
+                                    title="Change Status" style="font-size: 16px;">{{object.delivery_Status}}</a></td>
+                            {% else %}
+                            <td class="mt-6"><a href="{% url 'order_status_update' object.id %}"
+                                    class="font-weight-bold text-white bg-radial-gradient-warning" data-toggle="tooltip"
+                                    title="Change Status" style="font-size: 16px;">{{object.delivery_Status}}</a></td>
+                            {% endif %}
+                            <td>{{object.delivery_time}}</td>
+                            <td class="p-5">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <a href="{% url 'order_details' object.id %}" data-toggle="tooltip"
+                                            data-placement="top" title="Details"><i
+                                                class="fas fa-clipboard-list text-hover-primary mr-2"></i></a>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a href="{% url 'order_update' object.id %}" data-toggle="tooltip"
+                                            data-placement="top" title="Edit"><i
+                                                class="fas fa-edit text-hover-primary mr-2"></i></a>
+                                    </div>
+                                    <div class="col-md-2 mt-2">
+                                        <a href="{% url 'delete_order' object.id %}" data-toggle="tooltip"
+                                            title="Delete"><i class="fas fa-trash-alt text-hover-primary mr-2"></i></a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

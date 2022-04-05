@@ -1,0 +1,28 @@
+{% extends '../../base.html' %}
+{% load static %}
+{% block content %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            {% for i in orders %}
+            <table class="table table-bordered">
+                <thead>
+                    <th>Receiver</th>
+                    <th>Reference ID</th>
+                    <th>Delivery Man Contact</th>
+                    <th>Track</th>
+                </thead>
+                <tbody>
+                    <td>{{i.receiver}}</td>
+                    <td>{{i.reference_id}}</td>
+                    <td>{{i.driver.contact}}</td>
+                    <td><a href="{% url 'user_delivery_tracking' i.id %}">Track Delivery</a></td>
+                </tbody>
+            </table>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

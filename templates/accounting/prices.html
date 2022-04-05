@@ -1,0 +1,40 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="d-flex flex-column-fluid">
+        <div class="container">
+            <div class="card card-custom card-sticky" id="kt_page_sticky_card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h3 class="card-label font-h3">
+                            Prices for different zones
+                        </h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="text-center">
+                                <th>Inside Dhaka</th>
+                                <th>Dhaka Suburb</th>
+                                <th>Outside Dhaka</th>
+                                <th>Extra price(after 1 kg)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="text-center">
+                                {% for object in object_list %}
+                                <td>{{object.inside_dhaka}}</td>
+                                <td>{{object.dhaka_suburb}}</td>
+                                <td>{{object.outside_dhaka}}</td>
+                                <td>{{object.extra}}</td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,656 @@
+{% extends '../base.html' %} {% load static %} {% block content %}
+
+<style>
+    .alert {
+        color: #721c24 !important;
+        background-color: #f8d7da !important;
+        border-color: #f5c6cb !important;
+        width: 300px;
+        text-align: center;
+        align-self: center;
+    }
+
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #C9F7F5;
+    }
+
+    /* Style the buttons inside the tab */
+    .tab button {
+        color: teal;
+        background-color: #C9F7F5;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        font-size: 17px;
+    }
+
+    /* Change background color of buttons on hover */
+    .tab button:hover {
+        background-color: #1BC5BD;
+        color: white;
+    }
+
+    /* Create an active/current tablink class */
+    .tab button.active {
+        background-color: #00aba3;
+        color: white;
+    }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+</style>
+
+{%if messages%}
+<div class="alert alert-success" id="alert">
+    {% for message in messages %}
+    <li {% if message.tags %} class=" {{ message.tags }} " style="list-style: none;" {% endif %}> <i class="fa fa-times"
+            style="color: red; padding-right: 5px;"></i>{{message }} </li>
+    {% endfor %}
+</div>
+{%endif%}
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Subheader-->
+    <div class="subheader py-2 py-lg-4 subheader-transparent" id="kt_subheader">
+        <div class="container d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+            <!--begin::Details-->
+            <div class="d-flex align-items-center flex-wrap mr-2">
+                <!--begin::Title-->
+                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Users</h5>
+                <!--end::Title-->
+                <!--begin::Separator-->
+                <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-5 bg-gray-200"></div>
+                <!--end::Separator-->
+                <!--begin::Search Form-->
+                <div class="d-flex align-items-center" id="kt_subheader_search">
+                    <span class="text-dark-50 font-weight-bold" id="kt_subheader_total">{{count}}</span>
+
+                    <form class="ml-5" action="{%url 'search_user4'  %}">
+                        <div class="input-group input-group-sm input-group-solid" style="max-width: 175px">
+                            <input type="text" class="form-control" id="tags" name="q4" placeholder="Search users..."
+                                value="{{ request.GET.q4 }}" required />
+                            <div class="input-group-append">
+                                <button class="btn btn-success" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+            <!--end::Details-->
+            <!--begin::Toolbar-->
+            <div class="d-flex align-items-center">
+                <!--begin::Button-->
+                <a href="#" class=""></a>
+                <!--end::Button-->
+                <!--begin::Button-->
+                <a href="{%url 'register' %}"
+                    class="btn btn-light-primary font-weight-bold btn-sm px-5 font-size-base ml-2">Add User</a>
+
+            </div>
+            <!--end::Toolbar-->
+        </div>
+    </div>
+    <!--end::Subheader-->
+
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            <div class="tab">
+                <button class="tablinks offset-sm-3" onclick="openRole(event, 'Users')">Users</button>
+                <button class="tablinks" onclick="openRole(event, 'Agents')">Agents</button>
+                <button class="tablinks" onclick="openRole(event, 'Merchants')">Merchants</button>
+                <button class="tablinks" onclick="openRole(event, 'Drivers')">Drivers</button>
+                <button class="tablinks" onclick="openRole(event, 'Deliveryman')">Delivery Men</button>
+            </div>
+
+            <div id="Users" class="tabcontent">
+                <!--begin::Row-->
+                <div class="row">
+                    {% if user_list %}
+                    {%for user in user_list%}
+
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                        <!--begin::Card-->
+                        <div class="card card-custom gutter-b card-stretch">
+                            <!--begin::Body-->
+                            <div class="card-body text-center pt-4">
+                                <!--begin::Toolbar-->
+                                <div class="d-flex justify-content-end">
+                                    <div class="dropdown dropdown-inline" data-toggle="tooltip" title="Quick actions"
+                                        data-placement="left">
+                                        <a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="ki ki-bold-more-hor"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                                            <!--begin::Navigation-->
+                                            <ul class="navi navi-hover">
+
+                                                <li class="navi-separator mb-3 opacity-70"></li>
+                                                <li class="navi-item">
+                                                    <a href="#" class="navi-link">
+                                                        <span class="navi-text">
+                                                            {%if user.is_driver%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Driver</span>
+                                                            {%elif user.is_delivery_man%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Deliveryman</span>
+                                                            {%elif user.is_agent%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Agent</span>
+                                                            {%elif user.is_merchant%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Merchant</span>
+                                                            {%elif user.is_superuser%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Admin</span>
+                                                            {%else%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Client/user</span>
+                                                            {%endif%}
+                                                        </span>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                            <!--end::Navigation-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end::Toolbar-->
+                                <!--begin::User-->
+
+                                <div class="mt-7">
+                                    <div class="symbol symbol-circle symbol-lg-75">
+                                        {% if user.user_pic %}
+                                        <img src="{{user.user_pic.url}}" alt="image" /> {% else %}
+                                        <img src="" alt="user image" /> {% endif %}
+                                    </div>
+                                    <div class="symbol symbol-lg-75 symbol-circle symbol-primary d-none">
+                                        <span class="font-size-h3 font-weight-boldest">JB</span>
+                                    </div>
+                                </div>
+                                <!--end::User-->
+                                <!--begin::Name-->
+                                <div class="my-2">
+                                    <a href="#"
+                                        class="text-dark font-weight-bold text-hover-primary font-size-h4">{{user.username}}</a>
+                                </div>
+                                <!--end::Name-->
+                                <!--begin::Label-->
+
+                                <span
+                                    class="label label-inline label-lg label-light-warning btn-sm font-weight-bold">
+                                    {%if user.is_active%}
+                                    Active
+                                    {% else %}
+                                    Inactive
+                                    {% endif %}</span><br>
+                                <!--end::Label-->
+                                <!--begin::Buttons-->
+                                <div class="mt-9 mb-6">
+                                    <a href="{%url 'profile_visits' user.id%}">
+                                        <i class="fa fa-user"></i> View Details</a>
+                                </div>
+
+                                <!--end::Buttons-->
+                            </div>
+                            <!--end::Body-->
+                        </div>
+                        <!--end::Card-->
+                    </div>
+                    <!--end::Col-->
+                    {% endfor %}
+                    {% else %}
+                    <h3 id="userid">No User</h3>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div id="Agents" class="tabcontent">
+                <div class="row">
+                    {% if agent_list %}
+                    {% for user in agent_list %}
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                        <!--begin::Card-->
+                        <div class="card card-custom gutter-b card-stretch">
+                            <!--begin::Body-->
+                            <div class="card-body text-center pt-4">
+                                <!--begin::Toolbar-->
+                                <div class="d-flex justify-content-end">
+                                    <div class="dropdown dropdown-inline" data-toggle="tooltip" title="Quick actions"
+                                        data-placement="left">
+                                        <a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="ki ki-bold-more-hor"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                                            <!--begin::Navigation-->
+                                            <ul class="navi navi-hover">
+
+                                                <li class="navi-separator mb-3 opacity-70"></li>
+                                                <li class="navi-item">
+                                                    <a href="#" class="navi-link">
+                                                        <span class="navi-text">
+                                                            {%if user.is_driver%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Driver</span>
+                                                            {%elif user.is_delivery_man%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Deliveryman</span>
+                                                            {%elif user.is_agent%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Agent</span>
+                                                            {%elif user.is_merchant%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Merchant</span>
+                                                            {%elif user.is_superuser%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Admin</span>
+                                                            {%else%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Client/user</span>
+                                                            {%endif%}
+                                                        </span>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                            <!--end::Navigation-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end::Toolbar-->
+                                <!--begin::User-->
+
+                                <div class="mt-7">
+                                    <div class="symbol symbol-circle symbol-lg-75">
+                                        {% if user.user_pic %}
+                                        <img src="{{user.user_pic.url}}" alt="image" /> {% else %}
+                                        <img src="" alt="user image" /> {% endif %}
+                                    </div>
+                                    <div class="symbol symbol-lg-75 symbol-circle symbol-primary d-none">
+                                        <span class="font-size-h3 font-weight-boldest">JB</span>
+                                    </div>
+                                </div>
+                                <!--end::User-->
+                                <!--begin::Name-->
+                                <div class="my-2">
+                                    <a href="#"
+                                        class="text-dark font-weight-bold text-hover-primary font-size-h4">{{user.username}}</a>
+                                </div>
+                                <!--end::Name-->
+                                <!--begin::Label-->
+
+                                <span
+                                    class="label label-inline label-lg label-light-warning btn-sm font-weight-bold">{%if user.is_active%}
+                                    Active
+                                    {%else%}
+                                    Inactive
+                                    {%endif%}</span><br>
+                                <!--end::Label-->
+                                <!--begin::Buttons-->
+                                <div class="mt-9 mb-6">
+                                    <a href="{%url 'profile_visits' user.id%}">
+                                        <i class="fa fa-user"></i> View Details</a>
+                                </div>
+
+                                <!--end::Buttons-->
+                            </div>
+                            <!--end::Body-->
+                        </div>
+                        <!--end::Card-->
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <h3 id="agentid">No Agents</h3>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div id="Merchants" class="tabcontent">
+                <div class="row">
+                    {% if merchant_list %}
+                    {%for user in merchant_list%}
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                        <!--begin::Card-->
+                        <div class="card card-custom gutter-b card-stretch">
+                            <!--begin::Body-->
+                            <div class="card-body text-center pt-4">
+                                <!--begin::Toolbar-->
+                                <div class="d-flex justify-content-end">
+                                    <div class="dropdown dropdown-inline" data-toggle="tooltip" title="Quick actions"
+                                        data-placement="left">
+                                        <a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="ki ki-bold-more-hor"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                                            <!--begin::Navigation-->
+                                            <ul class="navi navi-hover">
+
+                                                <li class="navi-separator mb-3 opacity-70"></li>
+                                                <li class="navi-item">
+                                                    <a href="#" class="navi-link">
+                                                        <span class="navi-text">
+                                                            {%if user.is_driver%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Driver</span>
+                                                            {%elif user.is_delivery_man%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Deliveryman</span>
+                                                            {%elif user.is_agent%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Agent</span>
+                                                            {%elif user.is_merchant%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Merchant</span>
+                                                            {%elif user.is_superuser%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Admin</span>
+                                                            {%else%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Client/user</span>
+                                                            {%endif%}
+                                                        </span>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                            <!--end::Navigation-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end::Toolbar-->
+                                <!--begin::User-->
+
+                                <div class="mt-7">
+                                    <div class="symbol symbol-circle symbol-lg-75">
+                                        {% if user.user_pic %}
+                                        <img src="{{user.user_pic.url}}" alt="image" /> {% else %}
+                                        <img src="" alt="user image" /> {% endif %}
+                                    </div>
+                                    <div class="symbol symbol-lg-75 symbol-circle symbol-primary d-none">
+                                        <span class="font-size-h3 font-weight-boldest">JB</span>
+                                    </div>
+                                </div>
+                                <!--end::User-->
+                                <!--begin::Name-->
+                                <div class="my-2">
+                                    <a href="#"
+                                        class="text-dark font-weight-bold text-hover-primary font-size-h4">{{user.username}}</a>
+                                </div>
+                                <!--end::Name-->
+                                <!--begin::Label-->
+
+                                <span
+                                    class="label label-inline label-lg label-light-warning btn-sm font-weight-bold">{%if user.is_active%}
+                                    Active
+                                    {%else%}
+                                    Inactive
+                                    {%endif%}</span><br>
+                                <!--end::Label-->
+                                <!--begin::Buttons-->
+                                <div class="mt-9 mb-6">
+                                    <a href="{%url 'profile_visits' user.id%}">
+                                        <i class="fa fa-user"></i> View Details</a>
+                                </div>
+
+                                <!--end::Buttons-->
+                            </div>
+                            <!--end::Body-->
+                        </div>
+                        <!--end::Card-->
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <h3 id="merchantid">No Merchants</h3>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div id="Drivers" class="tabcontent">
+                <div class="row">
+                    {% if driver_list %}
+                    {%for user in driver_list%}
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                        <!--begin::Card-->
+                        <div class="card card-custom gutter-b card-stretch">
+                            <!--begin::Body-->
+                            <div class="card-body text-center pt-4">
+                                <!--begin::Toolbar-->
+                                <div class="d-flex justify-content-end">
+                                    <div class="dropdown dropdown-inline" data-toggle="tooltip" title="Quick actions"
+                                        data-placement="left">
+                                        <a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="ki ki-bold-more-hor"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                                            <!--begin::Navigation-->
+                                            <ul class="navi navi-hover">
+
+                                                <li class="navi-separator mb-3 opacity-70"></li>
+                                                <li class="navi-item">
+                                                    <a href="#" class="navi-link">
+                                                        <span class="navi-text">
+                                                            {%if user.is_driver%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Driver</span>
+                                                            {%elif user.is_delivery_man%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Deliveryman</span>
+                                                            {%elif user.is_agent%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Agent</span>
+                                                            {%elif user.is_merchant%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Merchant</span>
+                                                            {%elif user.is_superuser%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Admin</span>
+                                                            {%else%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Client/user</span>
+                                                            {%endif%}
+                                                        </span>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                            <!--end::Navigation-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end::Toolbar-->
+                                <!--begin::User-->
+
+                                <div class="mt-7">
+                                    <div class="symbol symbol-circle symbol-lg-75">
+                                        {% if user.user_pic %}
+                                        <img src="{{user.user_pic.url}}" alt="image" /> {% else %}
+                                        <img src="" alt="user image" /> {% endif %}
+                                    </div>
+                                    <div class="symbol symbol-lg-75 symbol-circle symbol-primary d-none">
+                                        <span class="font-size-h3 font-weight-boldest">JB</span>
+                                    </div>
+                                </div>
+                                <!--end::User-->
+                                <!--begin::Name-->
+                                <div class="my-2">
+                                    <a href="#"
+                                        class="text-dark font-weight-bold text-hover-primary font-size-h4">{{user.username}}</a>
+                                </div>
+                                <!--end::Name-->
+                                <!--begin::Label-->
+
+                                <span
+                                    class="label label-inline label-lg label-light-warning btn-sm font-weight-bold">{%if user.is_active%}
+                                    Active
+                                    {%else%}
+                                    Inactive
+                                    {%endif%}</span><br>
+                                <!--end::Label-->
+                                <!--begin::Buttons-->
+                                <div class="mt-9 mb-6">
+                                    <a href="{%url 'profile_visits' user.id%}">
+                                        <i class="fa fa-user"></i> View Details</a>
+                                </div>
+
+                                <!--end::Buttons-->
+                            </div>
+                            <!--end::Body-->
+                        </div>
+                        <!--end::Card-->
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <h3 id="driverid">No Driver</h3>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div id="Deliveryman" class="tabcontent">
+                <div class="row">
+                    {% if delivery_man_list %}
+                    {%for user in delivery_man_list%}
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                        <!--begin::Card-->
+                        <div class="card card-custom gutter-b card-stretch">
+                            <!--begin::Body-->
+                            <div class="card-body text-center pt-4">
+                                <!--begin::Toolbar-->
+                                <div class="d-flex justify-content-end">
+                                    <div class="dropdown dropdown-inline" data-toggle="tooltip" title="Quick actions"
+                                        data-placement="left">
+                                        <a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="ki ki-bold-more-hor"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                                            <!--begin::Navigation-->
+                                            <ul class="navi navi-hover">
+
+                                                <li class="navi-separator mb-3 opacity-70"></li>
+                                                <li class="navi-item">
+                                                    <a href="#" class="navi-link">
+                                                        <span class="navi-text">
+                                                            {%if user.is_driver%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Driver</span>
+                                                            {%elif user.is_delivery_man%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Deliveryman</span>
+                                                            {%elif user.is_agent%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Agent</span>
+                                                            {%elif user.is_merchant%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Merchant</span>
+                                                            {%elif user.is_superuser%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Admin</span>
+                                                            {%else%}
+                                                            <span
+                                                                class="label label-xl label-inline label-light-success">Client/user</span>
+                                                            {%endif%}
+                                                        </span>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                            <!--end::Navigation-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end::Toolbar-->
+                                <!--begin::User-->
+
+                                <div class="mt-7">
+                                    <div class="symbol symbol-circle symbol-lg-75">
+                                        {% if user.user_pic %}
+                                        <img src="{{user.user_pic.url}}" alt="image" /> {% else %}
+                                        <img src="" alt="user image" /> {% endif %}
+                                    </div>
+                                    <div class="symbol symbol-lg-75 symbol-circle symbol-primary d-none">
+                                        <span class="font-size-h3 font-weight-boldest">JB</span>
+                                    </div>
+                                </div>
+                                <!--end::User-->
+                                <!--begin::Name-->
+                                <div class="my-2">
+                                    <a href="#"
+                                        class="text-dark font-weight-bold text-hover-primary font-size-h4">{{user.username}}</a>
+                                </div>
+                                <!--end::Name-->
+                                <!--begin::Label-->
+
+                                <span
+                                    class="label label-inline label-lg label-light-warning btn-sm font-weight-bold">{%if user.is_active%}
+                                    Active
+                                    {%else%}
+                                    Inactive
+                                    {%endif%}</span><br>
+                                <!--end::Label-->
+                                <!--begin::Buttons-->
+                                <div class="mt-9 mb-6">
+                                    <a href="{%url 'profile_visits' user.id%}">
+                                        <i class="fa fa-user"></i> View Details</a>
+                                </div>
+
+                                <!--end::Buttons-->
+                            </div>
+                            <!--end::Body-->
+                        </div>
+                        <!--end::Card-->
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <h3 id="deliverymanid">No Deliveryman</h3>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+<!--end::Content-->
+
+<script>
+    function openRole(evt, roleName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(roleName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+
+<script>
+    setTimeout(function () {
+        $('#alert').remove();
+    }, 5000);
+</script>
+{%endblock%}

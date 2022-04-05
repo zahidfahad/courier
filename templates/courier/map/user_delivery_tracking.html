@@ -1,0 +1,143 @@
+{% extends '../../base.html' %}
+{% load static %}
+{% block content %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            {% if messages %}
+            <div class="alert alert-custom alert-light-primary fade show mb-5" role="alert">
+                <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                <div class="alert-text">
+                    <p class="messages">
+                        {% for message in messages %}
+                    <p {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                        {{message}}
+                    </p>
+                    {% endfor %}
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+            <a href="" id="delivery"></a>
+            <a href="" id="pickup"></a>
+            <a href="" id="contact"></a>
+
+            <div id="map" style="height: 400px;"></div>
+
+            <script
+                src="https://cdn.jsdelivr.net/gh/barikoi/barikoi-js@b6f6295467c19177a7d8b73ad4db136905e7cad6/dist/barikoi.min.js?key:MTM0MjpTTzVSU0hCOFFO"></script>
+            <script>
+                var map = L.map('map').setView([51.505, -0.09], 13);
+
+                L.tileLayer(
+                    'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 18
+                }).addTo(map)
+
+
+                var delivery = JSON.parse("{{delivery|escapejs}}");
+                var pickup_point = JSON.parse("{{pick_up|escapejs}}");
+                var delivery_man = JSON.parse("{{delivery_man|escapejs}}");
+
+                var order_id = JSON.parse("{{order_id|escapejs}}");
+                var contact = JSON.parse("{{contact|escapejs}}");
+                var pickup_finish = JSON.parse("{{pickup_finish|escapejs}}");
+
+
+                var markers = {};
+
+                var icon = L.divIcon({
+                    html: `<span class="svg-icon svg-icon-warning svg-icon-3x"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="24" width="24" height="0"/><path d="M5,10.5 C5,6 8,3 12.5,3 C17,3 20,6.75 20,10.5 C20,12.8325623 17.8236613,16.03566 13.470984,20.1092932 C12.9154018,20.6292577 12.0585054,20.6508331 11.4774555,20.1594925 C7.15915182,16.5078313 5,13.2880005 5,10.5 Z M12.5,12 C13.8807119,12 15,10.8807119 15,9.5 C15,8.11928813 13.8807119,7 12.5,7 C11.1192881,7 10,8.11928813 10,9.5 C10,10.8807119 11.1192881,12 12.5,12 Z" fill="#000000" fill-rule="nonzero"/></g></svg></span>`,
+                    bgPos: [10, 10],
+                    iconAnchor: [20, 37],
+                    popupAnchor: [0, -37],
+                    className: 'leaflet-marker'
+                });
+
+                var contact = document.getElementById("contact").href = "Delivery Man <br><a href='tel:" + contact + "'> Call: " + contact + "</a>";
+                function setMarkers(data) {
+                    data.location.forEach(function (obj) {
+                        if (!markers.hasOwnProperty(obj.id)) {
+                            markers[obj.id] = new L.Marker([obj.lat, obj.long], { icon: icon }).bindPopup(contact).addTo(map);
+                            markers[obj.id].previousLatLngs = [];
+                        } else {
+                            markers[obj.id].previousLatLngs.push(markers[obj.id].getLatLng());
+                            markers[obj.id].setLatLng([obj.lat, obj.long]);
+                        }
+                    });
+                }
+                var json = {
+                    "location": [{
+                        "id": 'A',
+                        "lat": delivery_man[0],
+                        "long": delivery_man[1]
+                    }]
+                }
+
+                setMarkers(json);
+
+                setTimeout(function () {
+                    $.ajax({
+                        method: "GET",
+                        url: "/api/deliveryman/location/",
+                        success: function (data) {
+                            $.each(data, function (key, value) {
+                                var updatedJson = {
+                                    "location": [{
+                                        "id": 'A',
+                                        "lat": value.latitude,
+                                        "long": value.longitude
+                                    }]
+                                }
+                                setMarkers(updatedJson);
+                            })
+                        }
+                    })
+                }, 1000);
+
+
+
+
+                var icon = L.divIcon({
+                    html: `<span class="svg-icon svg-icon-primary svg-icon-3x"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="24" width="24" height="0"/><path d="M5,10.5 C5,6 8,3 12.5,3 C17,3 20,6.75 20,10.5 C20,12.8325623 17.8236613,16.03566 13.470984,20.1092932 C12.9154018,20.6292577 12.0585054,20.6508331 11.4774555,20.1594925 C7.15915182,16.5078313 5,13.2880005 5,10.5 Z M12.5,12 C13.8807119,12 15,10.8807119 15,9.5 C15,8.11928813 13.8807119,7 12.5,7 C11.1192881,7 10,8.11928813 10,9.5 C10,10.8807119 11.1192881,12 12.5,12 Z" fill="#000000" fill-rule="nonzero"/></g></svg></span>`,
+                    bgPos: [10, 10],
+                    iconAnchor: [20, 37],
+                    popupAnchor: [0, -37],
+                    className: 'leaflet-marker'
+                });
+                var change_delivery_location = document.getElementById("delivery").href = "<a href='/change-delivery-location/" + order_id + "/'>change delivery location</a>";
+
+                marker = new L.marker([delivery[0], delivery[1]], {
+                    icon: icon
+                })
+                    .bindPopup(change_delivery_location)
+                    .addTo(map);
+
+                if (pickup_finish === false) {
+                    var change_pickup_location = document.getElementById("pickup").href = "<a href='/change-pick-up-location/" + order_id + "/'>change pick up location</a>";
+
+                    // set custom SVG icon marker
+                    var icon = L.divIcon({
+                        html: `<span class="svg-icon svg-icon-danger svg-icon-3x"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="24" width="24" height="0"/><path d="M5,10.5 C5,6 8,3 12.5,3 C17,3 20,6.75 20,10.5 C20,12.8325623 17.8236613,16.03566 13.470984,20.1092932 C12.9154018,20.6292577 12.0585054,20.6508331 11.4774555,20.1594925 C7.15915182,16.5078313 5,13.2880005 5,10.5 Z M12.5,12 C13.8807119,12 15,10.8807119 15,9.5 C15,8.11928813 13.8807119,7 12.5,7 C11.1192881,7 10,8.11928813 10,9.5 C10,10.8807119 11.1192881,12 12.5,12 Z" fill="#000000" fill-rule="nonzero"/></g></svg></span>`,
+                        bgPos: [10, 10],
+                        iconAnchor: [20, 37],
+                        popupAnchor: [0, -37],
+                        className: 'leaflet-marker'
+                    });
+
+
+                    marker = new L.marker([pickup_point[0], pickup_point[1]], {
+                        icon: icon
+                    })
+                        .bindPopup(change_pickup_location)
+                        .addTo(map);
+                }
+                else {
+                }
+
+                map.locate({ setView: true, maxZoom: 16 });
+
+            </script>
+            {% endblock %}

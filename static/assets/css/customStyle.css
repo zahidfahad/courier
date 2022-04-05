@@ -1,0 +1,142 @@
+.myheading {
+    margin: 20px auto;
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+form {
+    font-size: medium;
+    display: grid;
+    font-weight: normal;
+}
+
+#package_sub {
+    height: auto;
+    width: 100px;
+    margin: 2px;
+}
+
+#money_transfer {
+    height: 20px;
+    width: 20px;
+    border-radius: 7px;
+}
+
+.csm-from-group {
+    padding: 15px;
+}
+
+.my-card {
+    max-width: 600px;
+}
+
+.my-card textarea {
+    resize: none;
+}
+
+.card-parent {
+    display: flex;
+}
+
+.my_custom_card {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    transform: translate(10%, 50%);
+    height: 200px;
+    width: 300px;
+    background-color: #c9f7f5;
+    border-radius: 6px;
+    color: white;
+    margin: 10px;
+    padding: 10px;
+}
+
+.my_custom_card input {
+    max-width: 275px;
+}
+
+.my_custom_card hr {
+    border: 2px solid;
+    border-radius: 5px;
+}
+
+/* #reffer_button {
+    margin-left: -10px;
+} */
+
+#finish_img,
+#accept_img {
+    height: 15px;
+    width: 15px;
+}
+
+#cashsearchbtn {
+    width: 100px;
+    color: white;
+}
+
+#cashcoldrop,
+#delivery_Status {
+    min-width: 150px;
+    border-radius: 6px;
+    border-style: solid;
+    border-color: #f64e60;
+}
+
+#paynow_sub,
+#ccsub {
+    width: 100px;
+    margin: 2px;
+    border-radius: 6px;
+}
+
+#ccstart,
+#ccend {
+    width: 180px;
+    border-radius: 6px;
+    margin: 4px;
+    padding: 6px;
+}
+
+#modal_form input,
+#modal_form select,
+#modal_form textarea {
+    width: 180px;
+    border-radius: 6px;
+    resize: none;
+    margin: 1px;
+}
+
+#large_press {
+    font-family: OpenSans;
+    color: #FFFFFF;
+    background-color: #F64E60;
+    border: 1px solid #F64E60;
+    border-radius: 5px;
+    box-shadow: 0px 5px 0px #e0616d;
+    position: relative;
+    top: 0px;
+    transition: all ease 0.3s;
+}
+
+#large_press:active {
+    box-shadow: 0 3px 0 #e0616d;
+    top: 3px;
+}
+
+#reg_check {
+    margin: 7px auto;
+    font-size: 15px;
+}
+
+#Add_wallet_form {
+    height: fit-content;
+    width: 280px;
+}
+
+#Add_wallet_form input {
+    margin: 2px;
+    border-radius: 6px;
+    padding: 5px;
+}

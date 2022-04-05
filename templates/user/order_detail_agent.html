@@ -1,0 +1,581 @@
+{% extends '../base.html' %} {% load static %} {% block content %}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            {% for object in orders %}
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card card-custom gutter-b bg-diagonal">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between p-4 flex-lg-wrap flex-xl-nowrap">
+                                <div class="d-flex flex-column mr-5">
+                                    <a href="#" class="h4 text-dark text-hover-primary mb-5">
+                                        Receiver Number
+                                    </a>
+                                </div>
+                                <div class="ml-6 ml-lg-0 ml-xxl-6 flex-shrink-0" style="position: absolute; left: 35%;">
+                                    <a href="tel:{{object.receiver_Contact}}" target="_blank" class="btn font-weight-bolder text-uppercase btn-light-info py-4 px-6">
+                                        <i class="icon-xl la la-phone"></i> {{object.receiver_Contact}}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row text-right">
+                        <div style="margin-top: 27px; padding: 10px;" class="text-right">
+
+                            {% if object.delivery_Status == 'Complete' %}
+                            <a href="{% url 'invoice_generator' object.id %}" class="btn btn-twitter"> <i class="fas fa-file-invoice"></i> Download</a>
+                            {% endif %} {% if request.user.is_driver or request.user.is_delivery_man%}
+                            <a href="{% url 'finish_otp' object.id %}" class="btn btn-warning">Finish</a> {% elif request.user.is_user and object.delivery_Status == 'Pending' %}
+                            <button id="large_press" class="btn btn-danger">Cancel Order</button> {%endif%}
+                            <input type="text" value="{{object.id}}" style="display: none;" id="obj_id">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <div class="text-center alert alert-info">
+                                <h3>Order Details</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-center alert alert-info">
+                                <h3>Sender</h3>
+                            </div>
+                            <div class="csm-from-group">
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label> Name</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="la la-user"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{object.user.first_name}} {{object.user.last_name}}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label> Contact</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-id-badge"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{object.user.contact}}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{object.user.email}}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form- group">
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <label>Address</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i
+                                                            class="far fa-address-card"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" value="{{object.user.address}} {{object.user.city}}" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="text-center alert alert-info">
+                                <h3>Receiver</h3>
+                            </div>
+                            <div class="csm-from-group">
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label>Name</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="la la-user"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{object.receiver}}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label> Contact</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-id-badge"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{object.receiver_Contact}}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{object.receiver_Email}}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form- group">
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <label>Address</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i
+                                                            class="far fa-address-card"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" value="{{object.receiver_Address}}" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <!-- <div class="separator separator-dashed my-10"></div> -->
+
+                    <!-- <div class="row">
+                        <div class="col-md-12 text-center">
+                            <div class="text-center alert alert-info">
+                                <h3>Order Details</h3>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <div class="csm-from-group">
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label>Reference ID</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{object.reference_id}}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label>Service</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-taxi"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{object.service}}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label>Contents</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-box"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{object.contents}}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label>Package</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-box"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{object.package}}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form- group">
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <label>Priority</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-list-ol"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" value="{{object.priority}} {{object.user.city}}" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form- group">
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <label>Delivery Time</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i
+                                                            class="far fa-calendar-alt"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" value="{{object.delivery_time}} {{object.user.city}}" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% if request.user.is_driver or request.user.is_delivery_man or request.user.is_superuser %}
+                                <div class="form- group">
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <label>Driver Commission</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i
+                                                            class="far fa-calendar-alt"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" value="{{object.driver_amount}}" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {%endif%}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="csm-from-group">
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label>Transaction ID</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{object.tran_id}}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label>Product Type</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                        class="fab fa-product-hunt"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{object.product_Type}}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label>Quantity</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-list-ol"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{object.quantity}}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label>Amount</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{object.amount}}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form- group">
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <label>Delivery Status</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-truck"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" value="{{object.delivery_Status}}" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form- group">
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <label>Delivery man</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i
+                                                            class="fas fa-user-alt"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" value="{{object.driver.first_name}} {{object.driver.last_name}}" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if request.user.is_superuser %}
+                                <div class="form- group">
+                                    <div class="form-group row">
+                                        <div class="col-md-8">
+                                            <!-- Button trigger modal-->
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">Manage Commission</button>
+
+                                            <!-- Modal-->
+                                            <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                                    <div class="modal-content" style="width: 290px;">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Manage Commission</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <i aria-hidden="true" class="ki ki-close"></i>
+                                        </button>
+                                                        </div>
+                                                        <form action="" method="post" id="modal_form">
+                                                            {% csrf_token %}
+                                                            <div class="modal-body" style="height: 180px;">
+                                                                <div class="row"><label for="com_type">Commission Type</label>
+                                                                    <select name="com_type" id="com_type" class="form-control" required>
+                                                                      <option value="Amount">Amount</option>
+                                                                      <option value="Percentage">Percentage</option>
+                                                                    </select></div>
+                                                                <div class="row">
+                                                                    <label for="dr_com">Commission</label>
+                                                                    <input type="text" id="dr_com" name="dr_com" />
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary font-weight-bold">Save</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                {%endif%}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div id="map" style="height: 400px;"></div>
+
+
+                </div>
+                <input type="text" id="id_pick_up_latitude" value="{{object.pick_up_latitude}}" hidden>
+                <input type="text" id="id_pick_up_longitude" value="{{object.pick_up_longitude}}" hidden>
+                <input type="text" id="id_delivery_latitude" value="{{object.delivery_latitude}}" hidden>
+                <input type="text" id="id_delivery_longitude" value="{{object.delivery_longitude}}" hidden>
+                <input type="text" id="id_driver_latitude" name="driver_latitude" value="{{object.driver.latitude}}" hidden>
+                <input type="text" id="id_driver_longitude" name="driver_longitude" value="{{object.driver.longitude}}" hidden>
+                <input type="text" id="id_driver_latitude" name="driver_latitude" value="{{object.driver_latitude}}" hidden>
+                <input type="text" id="id_driver_longitude" name="driver_longitude" value="{{object.driver_longitude}}" hidden>
+                <div id="" style="height: 400px;"></div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/gh/barikoi/barikoi-js@b6f6295467c19177a7d8b73ad4db136905e7cad6/dist/barikoi.min.js?key:MTM0MjpTTzVSU0hCOFFO"></script>
+    <script>
+        var map = L.map('map').setView([23.78371495211694, 90.4495255362658], 13);
+        // Set up the OSM layer
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18
+            }).addTo(map)
+
+        var pick_up_latitude = document.getElementById("id_pick_up_latitude").value;
+        var pick_up_longitude = document.getElementById("id_pick_up_longitude").value;
+        var delivery_latitude = document.getElementById("id_delivery_latitude").value;
+        var delivery_longitude = document.getElementById("id_delivery_longitude").value;
+        var driver_latitude = document.getElementById("id_driver_latitude").value;
+        var driver_longitude = document.getElementById("id_driver_longitude").value;
+
+        var pickup = [pick_up_latitude, pick_up_longitude]
+        var delivery = [delivery_latitude, delivery_longitude]
+        var driver = [driver_latitude, driver_longitude]
+
+        var icon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        marker = new L.marker([driver[0], driver[1]], {
+                icon: icon
+            })
+            .bindPopup('delivery man')
+            .addTo(map);
+
+        var icon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        marker = new L.marker([pickup[0], pickup[1]], {
+                icon: icon
+            })
+            .bindPopup('pick up point')
+            .addTo(map);
+
+        var icon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+        marker = new L.marker([delivery[0], delivery[1]], {
+                icon: icon
+            })
+            .bindPopup('Delivery point')
+            .addTo(map);
+
+        map.locate({
+            setView: true,
+            maxZoom: 16
+        });
+    </script>
+
+    <script>
+        var pressTimer;
+        var id = document.getElementById('obj_id').value
+        var endpoint = '/cancel/order/' + id
+        var endpoint3 = '/order-list/'
+        var endpoint4 = '/manage/commission/'
+        $("#large_press").mouseup(function() {
+            clearTimeout(pressTimer);
+            // Clear timeout
+            return false;
+        }).mousedown(function() {
+            // Set timeout
+            pressTimer = window.setTimeout(function() {
+
+                $.ajax({
+                    method: "GET",
+                    url: endpoint,
+
+                    success: function(data) {
+                        window.location.href = endpoint3;
+                    }
+                });
+
+            }, 1000);
+            return false;
+        });
+
+        $("#modal_form").submit(function(event) {
+            event.preventDefault();
+            var com_type = $('#com_type').val();
+            var dr_com = $('#dr_com').val();
+            var obj_id = document.getElementById('obj_id').value
+            $.ajax({
+                url: endpoint4,
+                type: 'post',
+                data: {
+                    obj_id: obj_id,
+                    com_type: com_type,
+                    dr_com: dr_com,
+                },
+
+                success: function(data) {
+                    Swal.fire("Managed Commission", "Commission sent to driver", "success", data);
+                }
+            });
+        });
+    </script>
+
+    {% endblock %}

@@ -1,0 +1,226 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    #table {
+        width: 100%;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+        align-self: center;
+    }
+
+    #name {
+        color: red;
+    }
+
+    #tbody {
+        height: 250px !important;
+        overflow-y: scroll;
+    }
+
+    .fa-check {
+        color: green;
+    }
+
+    .fa-times {
+        color: red;
+    }
+
+    #modalbody {
+        max-height: 400px;
+        overflow-y: scroll;
+    }
+
+    .btn-primary {
+        align-self: center;
+    }
+</style>
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table class="table table-striped custom-table" id="tablemain">
+                            <tbody>
+                                <tr>
+                                    <th>Success</th>
+                                </tr>
+                                </tr>
+                                <tr>
+                                    <td>{%for i in queryset %}<strong id="name">{{ i.username|title }}</strong>
+                                        {% endfor%} Has completed {{success}} deliveries ! <i class="fa fa-check"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table class="table table-striped custom-table" id="tablemain">
+                            <tbody>
+                                <tr>
+                                    <th>On the Way</th>
+                                </tr>
+                                </tr>
+                                <tr>
+                                    <td>{%for i in queryset %}<strong id="name">{{ i.username|title }}</strong>
+                                        {% endfor %} Has yet to deliver {{delivering}} deliveries(Delivering) ! <i
+                                            class="fas fa-shipping-fast" style="color: yellow;"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table class="table table-striped custom-table" id="tablemain">
+                            <tbody>
+                                <tr>
+                                    <th>Pending</th>
+                                </tr>
+                                </tr>
+                                <tr>
+                                    <td>{%for i in queryset %}<strong id="name">{{ i.username|title }}</strong>
+                                        {% endfor %} Has yet to deliver {{pending}} deliveries(Pending) ! <i
+                                            class="fas fa-user-clock"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table class="table table-striped custom-table" id="tablemain">
+                            <tbody>
+                                <tr>
+                                    <th>Return</th>
+                                </tr>
+                                </tr>
+                                <tr>
+                                    <td>{%for i in queryset %}<strong id="name">{{ i.username|title }}</strong>
+                                        {% endfor %} Has {{returned}} returned deliveries(Return) ! <i class="fa fa-times"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-md-12">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                    data-whatever="@getbootstrap">Check reviews for {%for i in queryset %}<strong>
+                        {{ i.username|title }}</strong>{% endfor %} </button>
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Reviews</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="modalbody">
+                                {% for detail in review_msg %}
+                                {{detail.msg}}<br>
+                                {{detail.sent}} <br>
+                                <small>Reviewd By </small>
+                                <strong class="text-right" id="sender"> {{detail.sender.username|title}}</strong><br>
+                                <hr>
+                                {% endfor %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+            <div id="map" style="height: 400px;"></div>
+            <script
+                src="https://cdn.jsdelivr.net/gh/barikoi/barikoi-js@b6f6295467c19177a7d8b73ad4db136905e7cad6/dist/barikoi.min.js?key:MTM0MjpTTzVSU0hCOFFO"></script>
+            <script>
+                var map = L.map('map').setView([51.505, -0.09], 13);
+
+                L.tileLayer(
+                    'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 18
+                }).addTo(map)
+
+
+                var latitude = JSON.parse("{{latitude|escapejs}}");
+                var longitude = JSON.parse("{{longitude|escapejs}}");
+
+
+                var markers = {};
+
+                var icon = L.divIcon({
+                    html: `<span class="svg-icon svg-icon-warning svg-icon-3x"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="24" width="24" height="0"/><path d="M5,10.5 C5,6 8,3 12.5,3 C17,3 20,6.75 20,10.5 C20,12.8325623 17.8236613,16.03566 13.470984,20.1092932 C12.9154018,20.6292577 12.0585054,20.6508331 11.4774555,20.1594925 C7.15915182,16.5078313 5,13.2880005 5,10.5 Z M12.5,12 C13.8807119,12 15,10.8807119 15,9.5 C15,8.11928813 13.8807119,7 12.5,7 C11.1192881,7 10,8.11928813 10,9.5 C10,10.8807119 11.1192881,12 12.5,12 Z" fill="#000000" fill-rule="nonzero"/></g></svg></span>`,
+                    bgPos: [10, 10],
+                    iconAnchor: [20, 37],
+                    popupAnchor: [0, -37],
+                    className: 'leaflet-marker'
+                });
+
+                var contact = document.getElementById("contact").href = "Delivery Man <br><a href='tel:" + contact + "'> Call: " + contact + "</a>";
+                function setMarkers(data) {
+                    data.location.forEach(function (obj) {
+                        if (!markers.hasOwnProperty(obj.id)) {
+                            markers[obj.id] = new L.Marker([obj.lat, obj.long], { icon: icon }).bindPopup(contact).addTo(map);
+                            markers[obj.id].previousLatLngs = [];
+                        } else {
+                            markers[obj.id].previousLatLngs.push(markers[obj.id].getLatLng());
+                            markers[obj.id].setLatLng([obj.lat, obj.long]);
+                        }
+                    });
+                }
+                var json = {
+                    "location": [{
+                        "id": 'A',
+                        "lat": latitude,
+                        "long": longitude
+                    }]
+                }
+
+                setMarkers(json);
+
+                setTimeout(function () {
+                    $.ajax({
+                        method: "GET",
+                        url: "/api/deliveryman/location/",
+                        success: function (data) {
+                            $.each(data, function (key, value) {
+                                var updatedJson = {
+                                    "location": [{
+                                        "id": 'A',
+                                        "lat": value.latitude,
+                                        "long": value.longitude
+                                    }]
+                                }
+                                setMarkers(updatedJson);
+                            })
+                        }
+                    })
+                }, 1000);
+
+                map.locate({ setView: true, maxZoom: 16 });
+
+            </script>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

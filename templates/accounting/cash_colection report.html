@@ -1,0 +1,193 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+
+        <!--begin::Container-->
+        <div class="container">
+            <div class="myheading">
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <h2>Cash Collection Report</h2>
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="col-md-3">
+
+
+                        <!-- Button trigger modal-->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">Search</button>
+
+                        <!-- Modal-->
+                        <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                <div class="modal-content" style="width: 300px;">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Custom Collection Report</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+                                    </div>
+                                    <form action="" method="post" id="modal_form">
+                                        {% csrf_token %}
+                                        <div class="modal-body" style="height: 200px;">
+                                            <div class="form-group row">
+                                                <div class="col-md-2">
+                                                    <label for="ccstart">From</label>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <input type="date" id="ccstart" name="start" style="width: 180px;" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-2">
+                                                    <label for="ccend">To</label>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <input type="date" id="ccend" name="end" style="width: 180px;" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary font-weight-bold">Search</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <button class="btn btn-primary" onclick="this_month()">This Month</button>
+                        <button class="btn btn-secondary" onclick="today()">Today</button>
+
+                    </div>
+                </div>
+            </div>
+            <input type="text" value="{{dr}}" id="driver_id" style="display: none;">
+
+            <table id="data-table" class="display table table-separate table-head-custom table-checkable" style="width:100%">
+                <thead class="text-center">
+                    <tr>
+                        <th>Date</th>
+                        <th>Refernce Id</th>
+                        <th>Collector</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+
+
+                </tbody>
+            </table>
+            <h3 id="tf_text"></h3>
+        </div>
+    </div>
+</div>
+
+<script>
+    var endpoint1 = '/in/today/cash/collection/'
+    var endpoint2 = '/in/month/cash/collection/'
+    var endpoint3 = '/in/date/cash/collection/'
+    var count = 0
+    var am = 0
+    var dr = $('#driver_id').val();
+    $(document).ready(function() {
+
+        $.ajax({
+            method: "GET",
+            url: endpoint1,
+            data: {
+                dr: dr,
+            },
+            success: function(data) {
+                clear_table()
+                $.each(data, function(key, value) {
+                    count++;
+                    am += parseInt(value.amount)
+                    $('#data-table').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.order.reference_id + '</td>' + '<td>' + value.driver.first_name + ' ' + value.driver.last_name + '</td>' + '<td>' + value.amount + '</td>' + '<td>' + '</tr>');
+                    $("#tf_text").html("Total <b>" + count + "</b> order completed <b>" + am + "&#2547;</b> collected");
+                });
+            }
+        });
+
+    })
+
+    function today() {
+        $.ajax({
+            method: "GET",
+            url: endpoint1,
+            data: {
+                dr: dr,
+            },
+            success: function(data) {
+                clear_table()
+                $.each(data, function(key, value) {
+                    count++;
+                    am += parseInt(value.amount)
+                    $('#data-table').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.order.reference_id + '</td>' + '<td>' + value.driver.first_name + ' ' + value.driver.last_name + '</td>' + '<td>' + value.amount + '</td>' + '<td>' + '</tr>');
+                    $("#tf_text").html("Total <b>" + count + "</b> order completed <b>" + am + "&#2547;</b> collected");
+                });
+            }
+        });
+    }
+
+    function this_month() {
+        $.ajax({
+            method: "GET",
+            url: endpoint2,
+            data: {
+                dr: dr,
+            },
+            success: function(data) {
+                clear_table()
+                $.each(data, function(key, value) {
+                    count++;
+                    am += parseInt(value.amount)
+                    $('#data-table').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.order.reference_id + '</td>' + '<td>' + value.driver.first_name + ' ' + value.driver.last_name + '</td>' + '<td>' + value.amount + '</td>' + '<td>' + '</tr>');
+                    $("#tf_text").html("Total <b>" + count + "</b> order completed <b>" + am + "&#2547;</b> collected");
+                });
+            }
+        });
+    }
+
+    $("#modal_form").submit(function(event) {
+        event.preventDefault();
+        var st = $('#ccstart').val();
+        var en = $('#ccend').val();
+
+
+        $.ajax({
+            url: endpoint3,
+            type: 'get',
+            data: {
+                start: st,
+                end: en,
+                dr: dr,
+                // csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+            },
+
+            success: function(data) {
+                clear_table()
+                $.each(data, function(key, value) {
+                    count++;
+                    am += parseInt(value.amount)
+                    $('#data-table').append('<tr>' + '<td>' + value.created_on + '</td>' + '<td>' + value.order.reference_id + '</td>' + '<td>' + value.driver.first_name + ' ' + value.driver.last_name + '</td>' + '<td>' + value.amount + '</td>' + '<td>' + '</tr>');
+                    $("#tf_text").html("Total <b>" + count + "</b> order completed <b>" + am + "&#2547;</b> collected");
+                });
+            }
+
+        });
+    });
+
+
+    function clear_table() {
+        $('#data-table > tbody').empty();
+        count = 0;
+        am = 0;
+    }
+</script>
+{% endblock content%}

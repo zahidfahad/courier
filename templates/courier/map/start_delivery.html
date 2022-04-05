@@ -1,0 +1,178 @@
+{% extends '../../base.html' %}
+{% load static %}
+{% block content %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            <a href="" id="info"></a>
+            <div id="map" style="height: 400px;"></div>
+
+            <script
+                src="https://cdn.jsdelivr.net/gh/barikoi/barikoi-js@b6f6295467c19177a7d8b73ad4db136905e7cad6/dist/barikoi.min.js?key:MTM0MjpTTzVSU0hCOFFO"></script>
+            <script>
+                var map = L.map('map').setView([51.505, -0.09], 13);
+                // Set up the OSM layer
+                L.tileLayer(
+                    'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 18
+                }).addTo(map)
+
+
+                var delivery1 = JSON.parse("{{delivery1|escapejs}}");
+                var id_1 = JSON.parse("{{id_1|escapejs}}");
+
+                var info = document.getElementById("info").href = "<a href='/order-" + id_1 + "/'>Details</a><br><a href = '/finish/" + id_1 + "/' >Finish</a>"
+
+                if (delivery1.length === 0) {
+                }
+                else {
+                    marker = new L.marker([delivery1[0], delivery1[1]])
+                        .bindPopup(info)
+                        .addTo(map);
+                }
+
+                var delivery2 = JSON.parse("{{delivery2|escapejs}}");
+                var id_2 = JSON.parse("{{id_2|escapejs}}");
+
+                var info = document.getElementById("info").href = "<a href='/order-" + id_2 + "/'>Details</a><br><a href = '/finish/" + id_2 + "/'  >Finish</a>"
+
+                if (delivery2.length === 0) {
+                }
+                else {
+                    marker = new L.marker([delivery2[0], delivery2[1]])
+                        .bindPopup(info)
+                        .addTo(map);
+                }
+
+                var delivery3 = JSON.parse("{{delivery3|escapejs}}");
+                var id_3 = JSON.parse("{{id_3|escapejs}}");
+
+                var info = document.getElementById("info").href = "<a href='/order-" + id_3 + "/'>Details</a><br><a href = '/finish/" + id_3 + "/'>Finish</a>"
+
+                if (delivery3.length === 0) {
+                }
+                else {
+                    marker = new L.marker([delivery3[0], delivery3[1]])
+                        .bindPopup(info)
+                        .addTo(map);
+                }
+
+                var delivery4 = JSON.parse("{{delivery4|escapejs}}");
+                var id_4 = JSON.parse("{{id_4|escapejs}}");
+
+                var info = document.getElementById("info").href = "<a href='/order-" + id_4 + "/'>Details</a><br><a href = '/finish/" + id_4 + "/' >Finish</a>"
+
+                if (delivery4.length === 0) {
+                }
+                else {
+                    marker = new L.marker([delivery4[0], delivery4[1]])
+                        .bindPopup(info)
+                        .addTo(map);
+                }
+
+
+                var delivery5 = JSON.parse("{{delivery5|escapejs}}");
+                var id_5 = JSON.parse("{{id_5|escapejs}}");
+
+                var info = document.getElementById("info").href = "<a href='/order-" + id_5 + "/'>Details</a><br><a href = '/finish/" + id_5 + "/' >Finish</a>"
+
+                if (delivery5.length === 0) {
+                }
+                else {
+                    marker = new L.marker([delivery5[0], delivery5[1]])
+                        .bindPopup(info)
+                        .addTo(map);
+                }
+
+                var delivery6 = JSON.parse("{{delivery6|escapejs}}");
+                var id_6 = JSON.parse("{{id_6|escapejs}}");
+
+                var info = document.getElementById("info").href = "<a href='/order-" + id_6 + "/'>Details</a><br><a href = '/finish/" + id_6 + "/' >Finish</a>"
+
+                if (delivery6.length === 0) {
+                }
+                else {
+                    marker = new L.marker([delivery6[0], delivery6[1]])
+                        .bindPopup(info)
+                        .addTo(map);
+                }
+
+
+
+                var delivery7 = JSON.parse("{{delivery7|escapejs}}");
+                var id_7 = JSON.parse("{{id_7|escapejs}}");
+
+                var info = document.getElementById("info").href = "<a href='/order-" + id_7 + "/'>Details</a><br><a href = '/finish/" + id_7 + "/' >Finish</a>"
+
+                if (delivery7.length === 0) {
+                }
+                else {
+                    marker = new L.marker([delivery7[0], delivery7[1]])
+                        .bindPopup(info)
+                        .addTo(map);
+                }
+
+                var delivery8 = JSON.parse("{{delivery8|escapejs}}");
+                var id_8 = JSON.parse("{{id_8|escapejs}}");
+
+                var info = document.getElementById("info").href = "<a href='/order-" + id_8 + "/'>Details</a><br><a href = '/finish/" + id_8 + "/' >Finish</a>"
+
+                if (delivery8.length === 0) {
+                }
+                else {
+                    marker = new L.marker([delivery8[0], delivery8[1]])
+                        .bindPopup(info)
+                        .addTo(map);
+                }
+
+                var delivery9 = JSON.parse("{{delivery9|escapejs}}");
+                var id_9 = JSON.parse("{{id_9|escapejs}}");
+
+                var info = document.getElementById("info").href = "<a href='/order-" + id_9 + "/'>Details</a><br><a href = '/finish/" + id_9 + "/' >Finish</a>"
+
+                if (delivery9.length === 0) {
+                }
+                else {
+                    marker = new L.marker([delivery9[0], delivery9[1]])
+                        .bindPopup(info)
+                        .addTo(map);
+                }
+
+
+                var delivery10 = JSON.parse("{{delivery10|escapejs}}");
+                var id_10 = JSON.parse("{{id_10|escapejs}}");
+
+                var info = document.getElementById("info").href = "<a href='/order-" + id_10 + "/'>Details</a><br><a href ='/finish/" + id_10 + "/' >Finish</a>"
+
+                if (delivery10.length === 0) {
+                }
+                else {
+                    marker = new L.marker([delivery10[0], delivery10[1]])
+                        .bindPopup(info)
+                        .addTo(map);
+                }
+                var icon = new L.Icon({
+                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+
+                navigator.geolocation.getCurrentPosition(position => {
+                    const { coords: { latitude, longitude } } = position;
+
+                    var marker = new L.marker([latitude, longitude], {
+                        icon: icon,
+                        autoPan: true
+                    })
+                        .bindPopup('delivery man')
+                        .addTo(map);
+                })
+
+                map.locate({ setView: true, maxZoom: 16 });
+            </script>
+            {% endblock %}

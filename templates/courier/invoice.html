@@ -1,0 +1,286 @@
+<!doctype html> {% load static %}
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>Download pdf</title>
+
+    <style>
+        .container {
+            width: 1140;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .content-head,
+        .details-header {
+            text-align: center;
+            font-family: 'Times New Roman';
+        }
+
+        .user_header {
+            display: flex;
+        }
+
+        .rc,
+        .sn,
+        .details-header-text {
+            font-weight: bolder;
+        }
+
+        .details-header-text {
+            margin-top: 20px;
+        }
+
+        .user-information {
+            padding: 20px 50px;
+        }
+
+        hr {
+            border: 2px solid;
+            border-radius: 5px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 2px 8px;
+        }
+
+        .dt:nth-child(even) {
+            background-color: #f2f2f2
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        img {
+            height: 60px;
+            width: 200px;
+        }
+
+        .city {
+            padding: 0;
+        }
+
+        b {
+            font-weight: bolder;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="content-head">
+            <img src="{{img}}">
+            <h2><u><b>Courier Invoice</b></u></h2>
+
+        </div>
+
+
+        <div class="user-information">
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <h3 class="sn">Sender information</h3>
+                            <hr>
+                        </td>
+                        <td>
+                            <h3 class="rc">Receiver information</h3>
+                            <hr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{% for u in user%}
+                            <h5><b>Name:</b> {{u.first_name}} {{u.last_name}}</h5>
+                            {% endfor%}
+                        </td>
+                        <td>{% for s in data %}
+                            <h5><b>Name:</b> {{s.receiver}}</h5>
+                        </td> {% endfor%}
+                    </tr>
+                    <tr>
+                        <td>{% for u in user%}
+                            <h5><b>Contact :</b> {{u.contact}}</h5>
+                        </td> {% endfor%}
+                        <td>{% for s in data %}
+                            <h5><b>Contact :</b> {{s.receiver_Contact}}</h5>
+                        </td> {% endfor%}
+                    </tr>
+                    <tr>
+                        <td>{% for u in user%}
+                            <h5><b>Email :</b> {{u.email}}</h5>
+                        </td> {% endfor%}
+                        <td>{% for s in data %}
+                            <h5><b>Email :</b> {{s.receiver_Email}}</h5>
+                        </td> {% endfor%}
+                    </tr>
+                    <tr>
+                        <td>{% for u in user%}
+                            <h5><b>Address:</b> {{u.address}}</h5>
+                        </td> {% endfor%}
+                        <td>{% for s in data %}
+                            <h5><b>Address:</b> {{s.receiver_Address}}</h5>
+                        </td> {% endfor%}
+                    </tr>
+                    <tr class="city">
+                        <td>{% for u in user%}
+                            <h5><b>City:</b> {{u.city}}</h5>
+                        </td> {% endfor%}
+
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="details-header">
+            <h3 class="details-header-text">Order Details</h3>
+            <hr>
+        </div>
+        <div class="details">
+            <table class="table table-bordered text-center">
+                {% for s in data %}
+
+                <tr class="dt">
+                    <td>Code No {{s.reference_id}}</td>
+                    <td>Service Type: {{s.service}}</td>
+                </tr>
+                <tr class="dt">
+                    <td>Contains: {{s.contents}}</td>
+                    <td>Quantity: {{s.quantity}}</td>
+                </tr>
+                <tr class="dt">
+                    <td>Package {{s.package}}</td>
+                    <td>Priority: {{s.priority}}</td>
+                </tr>
+                <tr class="dt">
+                    <td>Service Type {{s.service}}</td>
+                    <td>Payment Method: {{s.payment}} </td>
+                </tr>
+                <tr class="dt">
+                    <td>Transaction Id: {{s.tran_id}}</td>
+                    <td>Amount: {{s.amount}}</td>
+
+                </tr>
+
+                <tr class="dt">
+                    {% if s.status == ''%}
+                    <td>Predicted Delivery Time: N/A</td>
+                    {%else%}
+                    <td>Delivery status: {{s.delivery_Status}}</td>
+                    {%endif%} {% if s.driver == None%}
+                    <td>Delivery Man Contact: N/A</td>
+                    {%else%}
+                    <td>Delivery Man Contact: {{s.driver.contact}}</td>
+                    {%endif%}
+
+                </tr>
+                {% endfor%}
+            </table>
+        </div>
+    </div>
+
+
+
+
+    </div>
+    <!--  
+
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-bordered text-center">
+                <h3>Reciver information</h3>
+                {% for s in data %}
+                <tr>
+                    <td> Reference no: {{s.reference_id}}</td>
+                    <td> Receiver: {{s.receiver}} </td>
+
+                </tr>
+                <tr>
+                    <td>Receiver Address: {{s.receiver_Address}}</td>
+                    <td>Receiver Contact: {{s.receiver_Contact}}</td>
+
+
+                </tr>
+                <tr>
+                    <td>Receiver Email: {{s.receiver_Email}}</td>
+                    <td>Service: {{s.service}}</td>
+
+                </tr>
+                <tr>
+                    <td>Product Type: {{s.product_Type}}</td>
+                    <td> Contents: {{s.contents}} </td>
+
+
+                </tr>
+                <tr>
+                    <td> Quantity : {{s.quantity}}</td>
+                    <td> Parcel Time: {{s.parcel_Time}}</td>
+
+                </tr>
+
+                <tr>
+                    {% if s.delivery_Time == None %}
+                    <td>Predicted Delivery Time: N/A</td>
+                    {%else%}
+                    <td>Predicted Delivery Time: {{s.delivery_Time}}</td>
+                    {%endif%}
+                    <td>Amount: {{s.amount}}</td>
+
+                </tr>
+
+                <tr>
+                    {% if s.status == ''%}
+                    <td>Predicted Delivery Time: N/A</td>
+                    {%else%}
+                    <td>Delivery status: {{s.delivery_Status}}</td>
+                    {%endif%} {% if s.driver == None%}
+                    <td>Delivery Man Contact: N/A</td>
+                    {%else%}
+                    <td>Delivery Man Contact: {{s.driver.contact}}</td>
+                    {%endif%}
+
+                </tr>
+                {% endfor%}
+            </table>
+        </div>
+
+
+    </div> -->
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+    <script>
+        x = document.getElementById("shipment").value
+        console.log(x)
+    </script>
+
+</body>
+
+</html>

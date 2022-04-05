@@ -1,0 +1,65 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+
+        <!--begin::Container-->
+        <div class="container">
+            <div class="myheading">
+                <h2> My Payments</h2>
+
+            </div>
+            <table id="data-table text-center" class="display table table-separate table-head-custom table-checkable" style="width:100%">
+                <thead class="text-center">
+                    <tr>
+                        <th>Date</th>
+                        <th>Currency</th>
+                        <th>Amount</th>
+                        <th>Transaction Id</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <!-- <th>Action</th> -->
+                    </tr>
+                </thead>
+                <!-- 'user', 'amount', 'referred_by', 'add_money', 'add_from', 'transfer' -->
+                <tbody class="text-center">
+                    {% for entry in data %}
+                    <tr>
+                        <td>{{entry.tran_date}}</td>
+                        <td>{{entry.currency}}</td>
+                        <td>{{entry.amount}}</td>
+                        <td>{{entry.tran_id}}</td>
+                        {% if entry.reason == 'O.P.'%}
+                        <td>Order Placement</td>
+                        {% elif entry.reason == 'A.T.W.'%}
+                        <td>Add To Wallet</td>
+                        {% elif entry.reason == 'W.O.P.'%}
+                        <td>Order Placement by Wallet </td>
+                        {% elif entry.reason == 'Gift'%}
+                        <td>Money Transfer</td>
+                        {% else%}
+                        <td>{{entry.reason}}</td>
+                        {%endif%}
+                        <td>{{entry.status}}</td>
+
+                        <!-- <td>
+                            <div class="my_action">
+                                <a href="{% url 'order_details' entry.id %}"><i
+                                    class="fa fa-envelope-open-text text-primary mr-5"></i></a>
+                                <a href="{% url 'order_update' entry.id %}"><i
+                                        class="fas fa-edit text-primary mr-5"></i></a>
+                                <a href="{% url 'delete_order' entry.id %}"><i
+                                            class="fas fa-trash-alt text-primary mr-5"></i></a>
+
+                            </div>
+                        </td> -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content%}

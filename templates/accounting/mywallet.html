@@ -1,0 +1,359 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+
+        <!--begin::Container-->
+        <div class="container">
+            <div class="myheading">
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <h2> My Wallet</h2>
+                    </div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6 text-right">
+                        <button class="btn btn-info" id="package_btn" data-toggle="modal" data-target="#exampleModalCustomScrollable">
+                            <img src="{% static 'assets/media/mt.png' %}" alt="money transfer" id="money_transfer">
+                            Money Transfer</button>
+                        <div class="modal fade" id="exampleModalCustomScrollable" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content" style="width: 300px;">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Transfer Money</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <i aria-hidden="true" class="ki ki-close"></i>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" style="text-align: left;">
+                                        <div data-scroll="true" data-height="200">
+                                            <form action="{% url 'money_transfer' %}" method="post" id="modal_form">
+                                                {% csrf_token %}
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <label for="rc">Receiver</label>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <select id="receiver" name="receiver" required>
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-3"> <label>Amount</label></div>
+                                                    <div class="col-md-9">
+                                                        <input type="text" id="amount" name="amount" required>
+                                                    </div>
+
+                                                </div>
+                                                <br>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary font-weight-bold" id="mt_submit">Ok</button>
+                                                </div>
+                                            </form>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        {% if request.user.is_driver or request.user.is_delivery_man%}
+                        <button class="btn btn-info" id="package_btn" data-toggle="modal" data-target="#cash_out">
+                            <i class="fas fa-hand-holding-usd"></i>Cash Out</button>
+                        <div class="modal fade" id="cash_out" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content" style="width: 300px;">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Cash Out</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <i aria-hidden="true" class="ki ki-close"></i>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" style="text-align: left;">
+                                        <div data-scroll="true" data-height="150">
+                                            <form action="{% url 'wallet_withdraw'%}" method="post" id="modal_form">
+                                                {% csrf_token %}
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <label>Amount</label>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <input type="text" id="amount" name="amount">
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary font-weight-bold">Ok</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {%endif%}
+                        <button class="btn btn-info" id="package_btn" data-toggle="modal" data-target="#add_money"><i
+                            class="fas fa-thumbtack"></i>Add Money</button>
+                        <div class="modal fade" id="add_money" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content" style="width: 300px;">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Add Money</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <i aria-hidden="true" class="ki ki-close"></i>
+                                    </button>
+                                    </div>
+                                    <div class="modal-body" style="text-align: left;">
+                                        <div data-scroll="true" data-height="150">
+                                            <form action="{% url 'add_money'%}" method="post" id="modal_form">
+                                                {% csrf_token %}
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <label>Amount</label>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <input type="text" id="amount" name="amount">
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary font-weight-bold">Ok</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li {% if message.tags %} class="alert alert-{{ message.tags }} font-size-h5" {% endif %}>
+                            {{message}}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <!--begin::Nav Panel Widget 1-->
+                    <div class="card card-custom gutter-b card-stretch card-shadowless">
+                        <!--begin::Body-->
+                        <div class="card-body p-0">
+                            <!--begin::Nav Tabs-->
+                            <ul class="dashboard-tabs nav nav-pills nav-danger row row-paddingless m-0 p-0 flex-column flex-sm-row" role="tablist">
+                                <!--begin::Item-->
+                                <li class="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
+                                    <a class="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" href="#tab_forms_widget_1">
+                                        <span class="nav-icon py-2 w-auto">
+                                            <span class="svg-icon svg-icon-3x">
+                                                <!--begin::Svg Icon | path:assets/media/svg/icons/Home/Library.svg-->
+                                                <div class="ceter-icon">
+                                                    <i class="fas fa-hand-holding-usd"></i>
+                                                </div>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                        </span>
+                                        <span class="nav-text font-size-lg py-2 font-weight-bold text-center">Current
+                                            Balance
+                                            <strong style="font-size: 20px;">{{total}} &#2547;</strong> in
+                                            account.</span>
+                                    </a>
+                                </li>
+                                <!--end::Item-->
+                                <!--begin::Item-->
+                                <li class="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
+                                    <a class="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" href="#tab_forms_widget_2">
+                                        <span class="nav-icon py-2 w-auto">
+                                            <span class="svg-icon svg-icon-3x">
+                                                <!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
+                                                <i class="fas fa-donate"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                        </span>
+                                        {% if cost %}
+                                        <span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Total
+                                            <strong style="font-size: 20px;"> {{cost}}&#2547; </strong> cost in this
+                                            month</span> {%else%}
+                                        <span class="nav-text font-size-lg py-2 font-weight-bolder text-center">No cost
+                                            in this month</span> {%endif%}
+                                    </a>
+                                </li>
+                                <!--end::Item-->
+
+                                <!--begin::Item-->
+                                {% if request.user.is_driver or request.user.is_delivery_man%}
+                                <li class="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
+                                    <a class="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" href="#tab_forms_widget_2">
+                                        <span class="nav-icon py-2 w-auto">
+                                            <span class="svg-icon svg-icon-3x">
+                                                <!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
+                                                <i class="fas fa-hand-holding-usd"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                        </span>
+                                        {% if cash_out %}
+                                        <span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Total
+                                            <strong style="font-size: 20px;"> {{cash_out}}&#2547; </strong> Cash Out in this
+                                            month</span> {%else%}
+                                        <span class="nav-text font-size-lg py-2 font-weight-bolder text-center">No Cash Out
+                                            in this month</span> {%endif%}
+                                    </a>
+                                </li>
+                                <!--end::Item-->
+                                {%endif%}
+                                <!--begin::Item-->
+                                <li class="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-0 mb-3 mb-lg-0">
+                                    <a class="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" href="#tab_forms_widget_5">
+                                        <span class="nav-icon py-2 w-auto">
+                                            <span class="svg-icon svg-icon-3x">
+                                                <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Group.svg-->
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                    height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                                        <path
+                                                            d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z"
+                                                            fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                        <path
+                                                            d="M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z"
+                                                            fill="#000000" fill-rule="nonzero" />
+                                                    </g>
+                                                </svg>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                        </span>
+                                        <span class="nav-text font-size-lg py-2 font-weight-bolder text-center">Total
+                                            <strong style="font-size: 20px;"> {{reffer}}</strong> reffer in this
+                                            month</span>
+                                    </a>
+                                </li>
+                                <!--end::Item-->
+                            </ul>
+                            <!--end::Nav Tabs-->
+                            <!--begin::Nav Content-->
+                            <div class="tab-content m-0 p-0">
+                                <div class="tab-pane active" id="forms_widget_tab_1" role="tabpanel">
+                                </div>
+                                <div class="tab-pane" id="forms_widget_tab_2" role="tabpanel"></div>
+                                <div class="tab-pane" id="forms_widget_tab_3" role="tabpanel"></div>
+                                <div class="tab-pane" id="forms_widget_tab_4" role="tabpanel"></div>
+                                <div class="tab-pane" id="forms_widget_tab_6" role="tabpanel"></div>
+                            </div>
+                            <!--end::Nav Content-->
+                        </div>
+                        <!--end::Body-->
+                    </div>
+                    <!--begin::Nav Panel Widget 1-->
+                </div>
+            </div>
+            <table id="data-table" class="display table table-separate table-head-custom table-checkable" style="width:100%">
+                <thead class="text-center">
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Transaction Cause</th>
+                        <th>Transaction ID</th>
+                        <th>Sender</th>
+                        <th>Receiver</th>
+
+                    </tr>
+                </thead>
+
+                <tbody class="text-center">
+                    {% for entry in data %}
+                    <tr>
+                        <td>{{entry.created_on}}</td>
+                        <td>{{entry.amount}} &#2547;</td>
+                        <td>{{entry.tr_method}}</td>
+                        <td>{{entry.tran_id}}</td>
+                        {% if entry.sender is not None %}
+                        <td>{{entry.sender}}</td>
+                        {% else %}
+                        <td>Self</td>
+                        {% endif %} {% if entry.receiver is not None %}
+                        <td>{{entry.receiver}}</td>
+                        {% else %}
+                        <td>Self</td>
+                        {% endif %}
+                        <!-- <td>
+                            <div class="my_action">
+                                <a href="{% url 'order_details' entry.id %}"><i
+                                    class="fa fa-envelope-open-text text-primary mr-5"></i></a>
+                                <a href="{% url 'order_update' entry.id %}"><i
+                                        class="fas fa-edit text-primary mr-5"></i></a>
+                                <a href="{% url 'delete_order' entry.id %}"><i
+                                            class="fas fa-trash-alt text-primary mr-5"></i></a>
+
+                            </div>
+                        </td> -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- <h3>Current Balance {{total}} &#2547;</h3> -->
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        var endpoint = '/api/user/list/'
+        $.ajax({
+            method: "GET",
+            url: endpoint,
+            success: function(data) {
+                $.each(data, function(key, value) {
+                    $('#receiver').append($('<option>', {
+                        value: value.id,
+                        text: value.username
+                    }));
+                });
+            }
+        });
+    });
+</script>
+<!-- <script>
+    $('#mt_submit').on('click', function(event) {
+
+
+        $rc = $('#receiver').val();
+        $am = $('#amount').val();
+        console.log(rc, am);
+        // var endpoint2 = '/money/transfer/'
+        // $.ajax({
+        //     url: endpoint2,
+        //     type: 'get',
+        //     data: {
+        //         rc: $rc,
+        //         am: $am,
+        //         csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+        //     },
+
+        //     success: function(data) {
+        //         alert(data)
+        //     }
+
+        // });
+
+    });
+</script> -->
+{% endblock content%}

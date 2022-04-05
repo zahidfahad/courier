@@ -1,0 +1,269 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    @import url(https://fonts.googleapis.com/css?family=Roboto);
+
+    body {
+    font-family: Roboto, sans-serif;
+    }
+
+    #chart {
+    max-width: 650px;
+    margin: 35px auto;
+    }
+
+</style>
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+<div class="d-flex flex-column-fluid">
+    <!--begin::Container-->
+    <div class="container">
+        <ul class="dashboard-tabs nav nav-pills nav-danger row row-paddingless m-0 p-0 flex-column flex-sm-row"
+            role="tablist">
+            <!--begin::Item-->
+            <li class="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
+                <a class="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center"
+                    data-toggle="pill" href="#tab_forms_widget_1">
+                    <span class="nav-icon py-2 w-auto">
+                        <span class="svg-icon svg-icon-3x">
+                            <!--begin::Svg Icon | path:assets/media/svg/icons/Home/Library.svg-->
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"></rect>
+                                    <path
+                                        d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z"
+                                        fill="#000000"></path>
+                                    <rect fill="#000000" opacity="0.3"
+                                        transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)"
+                                        x="16.3255682" y="2.94551858" width="3" height="18" rx="1"></rect>
+                                </g>
+                            </svg>
+                            <!--end::Svg Icon-->
+                        </span>
+                    </span>
+                    <span class="nav-text font-size-lg py-2 font-weight-bold text-center">Total
+                        <strong style="font-size: 20px; color: rgb(0, 0, 0);">{{ complete_orders }}</strong>
+                        order completed</span>
+                </a>
+            </li>
+            <!--end::Item-->
+            <!--begin::Item-->
+            <li class="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
+                <a class="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center"
+                    data-toggle="pill" href="#tab_forms_widget_2">
+                    <span class="nav-icon py-2 w-auto">
+                        <span class="svg-icon svg-icon-3x">
+                            <!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"></rect>
+                                    <rect fill="#000000" x="4" y="4" width="7" height="7" rx="1.5"></rect>
+                                    <path
+                                        d="M5.5,13 L9.5,13 C10.3284271,13 11,13.6715729 11,14.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,14.5 C4,13.6715729 4.67157288,13 5.5,13 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,9.5 C20,10.3284271 19.3284271,11 18.5,11 L14.5,11 C13.6715729,11 13,10.3284271 13,9.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z M14.5,13 L18.5,13 C19.3284271,13 20,13.6715729 20,14.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,14.5 C13,13.6715729 13.6715729,13 14.5,13 Z"
+                                        fill="#000000" opacity="0.3"></path>
+                                </g>
+                            </svg>
+                            <!--end::Svg Icon-->
+                        </span>
+                    </span>
+                    <span class="nav-text font-size-lg py-2 font-weight-bold text-center">Total
+                        <strong style="font-size: 20px; color: rgb(0, 0, 0);">{{ delivering_orders }}</strong>
+                        order in delivering proccess</span>
+                </a>
+            </li>
+            <!--end::Item-->
+
+        </ul>
+        <div class="row pt-4">
+            <div class="col-xl-12">
+                <div class="card card-custom gutter-b">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3 class="card-label">
+                                Total Orders Per Month
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="container" style="width: 100%; height: 100%;">
+                            <canvas id="monthly_order_chart"
+                                data-url="{% url 'individual_order_chart_for_user' %}"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pt-4">
+            <div class="col-xl-4">
+                <!--begin::List Widget 2-->
+                <div class="card card-custom bg-light-success gutter-b card-stretch card-shadowless">
+                    <!--begin::Header-->
+                    <div class="card-header border-0">
+                        <h3 class="card-title font-weight-bolder text-info">Orders in this Year</h3>
+                        <h4 class="card-title font-weight-bolder text-success">Total: {{ this_year_orders }}</h4>
+                    </div>
+
+                    <!--end::Header-->
+                    <!--begin::Body-->
+                    <div class="card-body pt-2" style="overflow-y: scroll; height:400px;">
+                        <!--begin::Item-->
+
+                        <table id="data-table" class="display table table-separate table-head-custom table-checkable"
+                            style="width:100%">
+                            <thead class="text-center">
+                                <tr>
+                                    <th>Reference Id</th>
+                                    <th>Status</th>
+                                    <th>Payment</th>
+                                </tr>
+
+                            </thead>
+                            <tbody class="text-center">
+                                {% for i in orders %}
+                                <tr>
+                                  <td><a href="{% url 'order_details' i.id %}" > {{ i.reference_id }} </a></td>
+                                    <td>{{ i.delivery_Status }}</td>
+                                    <td style="color: green;">{{ i.payment }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                        <!--end::Item-->
+                    </div>
+                    <!--end::Body-->
+                </div>
+                <!--end::List Widget 2-->
+            </div>
+            <div class="col-xl-8">
+                <div class="card card-custom gutter-b">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3 class="card-label">
+                                Monthly Returned Deliveries
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="container" style="width: 80%; height: 70%; margin: auto;">
+                            <canvas id="monthly_order_completed_chart"
+                                data-url="{% url 'individual_order_completed_user' %}"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Entry-->
+</div>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+<!-- line -->
+<script>
+    $(function (line) {
+        var $orderChart = $("#monthly_order_chart");
+        $.ajax({
+            url: $orderChart.data("url"),
+            success: function (data) {
+
+                var ctx = $orderChart[0].getContext("2d");
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Orders',
+                            backgroundColor: '#5aa897',
+                            borderColor: '#5aa897',
+                            data: data.data,
+                            tension: 0.1,
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: ''
+                        }
+                    }
+                });
+
+            }
+        });
+
+    });
+
+</script>
+
+
+<!-- doughnut -->
+<script>
+    $(function (doughnut) {
+        var $orderChart = $("#monthly_order_completed_chart");
+        $.ajax({
+            url: $orderChart.data("url"),
+            success: function (data) {
+
+                var ctx = $orderChart[0].getContext("2d");
+
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Complete Deliveries',
+                            data: data.data,
+                            backgroundColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(54, 162, 235)',
+                                'rgb(255, 205, 86)',
+                                '#eca3f5',
+                                '#f0e3ca',
+                                '#ff8303',
+                                '#a35709',
+                                '#f8a488',
+                                '#5aa897',
+                                '#45526c',
+                                '#845460',
+                                '#536162',
+                            ],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: ''
+                        }
+                    }
+                });
+
+            }
+        });
+
+    });
+
+</script>
+
+
+{%endblock%} -->

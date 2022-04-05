@@ -1,0 +1,209 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+
+        <!--begin::Container-->
+        <div class="container">
+            <div class="myheading">
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <h2>All Transactions </h2>
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="col-md-3">
+
+
+                        <!-- Button trigger modal-->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">Search</button>
+
+                        <!-- Modal-->
+                        <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                <div class="modal-content" style="width: 300px;">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Custom Transactions Search</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <i aria-hidden="true" class="ki ki-close"></i>
+                                        </button>
+                                    </div>
+                                    <form action="" method="post" id="modal_form">
+                                        {% csrf_token %}
+                                        <div class="modal-body" style="height: 150px;">
+                                            <div class="row">
+                                                <div class="col-md-3">From</div>
+                                                <div class="col-md-9">
+                                                    <input type="date" id="ccstart" name="start" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3">To</div>
+                                                <div class="col-md-9">
+                                                    <input type="date" id="ccend" name="end" />
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary font-weight-bold">Search</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% csrf_token %}
+                        <button class="btn btn-primary" onclick="this_month()">This Month</button>
+                        <button class="btn btn-secondary" onclick="today()">Today</button>
+                        <!-- <a href="#" class="btn btn-danger recordsbtn"> Delete All records</a> -->
+                    </div>
+                </div>
+            </div>
+            <input type="text" value="{{dr}}" id="driver_id" style="display: none;">
+            <p class="text-muted">
+                O.P.=> Order Placement, W.O.P.=> Wallet Order Placement, A.T.W.=> Add To Wallet
+            </p>
+            <table id="data-table" class="display table table-separate table-head-custom table-checkable" style="width:100%">
+                <thead class="text-center">
+                    <tr>
+                        <th>Transaction Date</th>
+                        <th>Transaction Id</th>
+                        <th>User</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Reason</th>
+                        <th>Card Type</th>
+                        <th>Card Issuer</th>
+                        <th>Card Brand</th>
+
+                    </tr>
+
+                </thead>
+                <tbody class="text-center">
+
+
+                </tbody>
+            </table>
+            <h3 id="tf_text"></h3>
+        </div>
+    </div>
+</div>
+
+<script>
+    var endpoint1 = '/api/today/transactions/'
+    var endpoint2 = '/api/this/month/transactions/'
+    var endpoint3 = '/api/date/transactions/'
+    var rurl = ''
+    var count = 0
+    var am = 0
+    $(document).ready(function() {
+
+        $.ajax({
+            method: "GET",
+            url: endpoint1,
+            success: function(data) {
+                clear_table()
+                if (data.length === 0) {
+                    $("#tf_text").html("There is no Transactions Today");
+                } else {
+                    $.each(data, function(key, value) {
+                        d = moment(value.tran_date).format('MM/DD/YYYY h:mm a');
+                        $('#data-table').append('<tr>' + '<td>' + d + '</td>' + '<td>' + value.tran_id + '</td>' + '<td>' + value.user.first_name + ' ' + value.user.last_name + '</td>' + '<td>' + value.amount + '</td>' + '<td>' + value.currency + '</td>' + '<td>' + value.reason + '</td>' + '<td>' + value.card_type + '</td>' + '<td>' + value.card_issuer + '</td>' + '<td>' + value.card_brand + '</td>' + '</tr>');
+                        am += parseInt(value.amount);
+                    })
+
+                    $("#tf_text").html("Total <b>" + data.length + "</b> transactions completed  with <b>" + am + "&#2547;</b>");
+                }
+            }
+        });
+
+
+    })
+
+    function today() {
+        $.ajax({
+            method: "GET",
+            url: endpoint1,
+
+            success: function(data) {
+                clear_table()
+                if (data.length === 0) {
+                    $("#tf_text").html("There is no Transactions Today");
+                } else {
+                    $.each(data, function(key, value) {
+                        d = moment(value.tran_date).format('MM/DD/YYYY h:mm a');
+                        $('#data-table').append('<tr>' + '<td>' + d + '</td>' + '<td>' + value.tran_id + '</td>' + '<td>' + value.user.first_name + ' ' + value.user.last_name + '</td>' + '<td>' + value.amount + '</td>' + '<td>' + value.currency + '</td>' + '<td>' + value.reason + '</td>' + '<td>' + value.card_type + '</td>' + '<td>' + value.card_issuer + '</td>' + '<td>' + value.card_brand + '</td>' + '</tr>');
+                        am += parseInt(value.amount);
+                    })
+
+                    $("#tf_text").html("Total <b>" + data.length + "</b> transactions completed  with <b>" + am + "&#2547;</b>");
+                }
+            }
+        });
+    }
+
+    function this_month() {
+        $.ajax({
+            method: "GET",
+            url: endpoint2,
+
+            success: function(data) {
+                clear_table()
+                if (data.length === 0) {
+                    $("#tf_text").html("There is no Transactions in this month");
+                } else {
+                    $.each(data, function(key, value) {
+                        d = moment(value.tran_date).format('MM/DD/YYYY h:mm a');
+                        $('#data-table').append('<tr>' + '<td>' + d + '</td>' + '<td>' + value.tran_id + '</td>' + '<td>' + value.user.first_name + ' ' + value.user.last_name + '</td>' + '<td>' + value.amount + '</td>' + '<td>' + value.currency + '</td>' + '<td>' + value.reason + '</td>' + '<td>' + value.card_type + '</td>' + '<td>' + value.card_issuer + '</td>' + '<td>' + value.card_brand + '</td>' + '</tr>');
+                        am += parseInt(value.amount);
+                    })
+
+                    $("#tf_text").html("Total <b>" + data.length + "</b> transactions completed  with <b>" + am + "&#2547;</b>");
+                }
+            }
+        });
+    }
+
+    $("#modal_form").submit(function(event) {
+        event.preventDefault();
+        var st = $('#ccstart').val();
+        var en = $('#ccend').val();
+
+        $.ajax({
+            url: endpoint3,
+            type: 'get',
+            data: {
+                start: st,
+                end: en,
+            },
+
+            success: function(data) {
+                clear_table()
+                if (data.length === 0) {
+                    $("#tf_text").html("There is no Transactions in given range");
+                } else {
+                    $.each(data, function(key, value) {
+                        d = moment(value.tran_date).format('MM/DD/YYYY h:mm a');
+                        $('#data-table').append('<tr>' + '<td>' + d + '</td>' + '<td>' + value.tran_id + '</td>' + '<td>' + value.user.first_name + ' ' + value.user.last_name + '</td>' + '<td>' + value.amount + '</td>' + '<td>' + value.currency + '</td>' + '<td>' + value.reason + '</td>' + '<td>' + value.card_type + '</td>' + '<td>' + value.card_issuer + '</td>' + '<td>' + value.card_brand + '</td>' + '</tr>');
+                        am += parseInt(value.amount);
+                    })
+                    $("#tf_text").html("Total <b>" + data.length + "</b> transactions completed  with <b>" + am + "&#2547;</b>");
+                }
+            }
+        });
+    });
+
+
+    function clear_table() {
+        $('#data-table > tbody').empty();
+        count = 0;
+        am = 0;
+        dr = 0;
+    }
+</script>
+{% endblock content%}

@@ -1,0 +1,149 @@
+{% extends '../../base.html' %}
+{% load static %}
+{% block content %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+
+            <div id="map" style="height: 400px;"></div>
+            <a style="display: none;" href="" id="start"></a>
+
+            <script
+                src="https://cdn.jsdelivr.net/gh/barikoi/barikoi-js@b6f6295467c19177a7d8b73ad4db136905e7cad6/dist/barikoi.min.js?key:MTM0MjpTTzVSU0hCOFFO"></script>
+            <script>
+                var map = L.map('map').setView([51.505, -0.09], 13);
+                // Set up the OSM layer
+                L.tileLayer(
+                    'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 18
+                }).addTo(map)
+
+                var pick_up1 = JSON.parse("{{pick_up1|escapejs}}");
+                var pick_up2 = JSON.parse("{{pick_up2|escapejs}}");
+                var pick_up3 = JSON.parse("{{pick_up3|escapejs}}");
+                var pick_up4 = JSON.parse("{{pick_up4|escapejs}}");
+                var pick_up5 = JSON.parse("{{pick_up5|escapejs}}");
+                var pick_up6 = JSON.parse("{{pick_up6|escapejs}}");
+                var pick_up7 = JSON.parse("{{pick_up7|escapejs}}");
+                var pick_up8 = JSON.parse("{{pick_up8|escapejs}}");
+                var pick_up9 = JSON.parse("{{pick_up9|escapejs}}");
+                var pick_up10 = JSON.parse("{{pick_up10|escapejs}}");
+
+
+                var id_1 = JSON.parse("{{id_1|escapejs}}");
+                var id_2 = JSON.parse("{{id_2|escapejs}}");
+                var id_3 = JSON.parse("{{id_3|escapejs}}");
+                var id_4 = JSON.parse("{{id_4|escapejs}}");
+                var id_5 = JSON.parse("{{id_5|escapejs}}");
+                var id_6 = JSON.parse("{{id_6|escapejs}}");
+                var id_7 = JSON.parse("{{id_7|escapejs}}");
+                var id_8 = JSON.parse("{{id_8|escapejs}}");
+                var id_9 = JSON.parse("{{id_9|escapejs}}");
+                var id_10 = JSON.parse("{{id_10|escapejs}}");
+
+                var start1 = JSON.parse("{{start1|escapejs}}");
+                var start2 = JSON.parse("{{start2|escapejs}}");
+                var start3 = JSON.parse("{{start3|escapejs}}");
+                var start4 = JSON.parse("{{start4|escapejs}}");
+                var start5 = JSON.parse("{{start5|escapejs}}");
+                var start6 = JSON.parse("{{start6|escapejs}}");
+                var start7 = JSON.parse("{{start7|escapejs}}");
+                var start8 = JSON.parse("{{start8|escapejs}}");
+                var start9 = JSON.parse("{{start9|escapejs}}");
+                var start10 = JSON.parse("{{start10|escapejs}}");
+
+                var start = document.getElementById("start").href = "<a href='/start-pick_up-user/" + id_1 + "/'>Start</a>";
+                if (pick_up1.length === 0) {
+                }
+                else {
+                    marker = new L.marker([pick_up1[0], pick_up1[1]])
+                        .bindPopup(start)
+                        .addTo(map);
+                }
+
+                var start = document.getElementById("start").href = "<a href='/start-pick_up-user/" + id_2 + "/'>Start</a>";
+                if (pick_up2.length === 0) {
+                }
+                else {
+                    marker = new L.marker([pick_up2[0], pick_up2[1]])
+                        .bindPopup(start)
+                        .addTo(map);
+                }
+                var start = document.getElementById("start").href = "<a href='/start-pick_up-user/" + id_3 + "/'>Start</a>";
+                if (pick_up3.length === 0) {
+                }
+                else {
+                    marker = new L.marker([pick_up3[0], pick_up3[1]])
+                        .bindPopup(start)
+                        .addTo(map);
+                }
+
+                var start = document.getElementById("start").href = "<a href='/start-pick_up-user/" + id_4 + "/'>Start</a>";
+                if (pick_up4.length === 0) {
+                }
+                else {
+                    marker = new L.marker([pick_up4[0], pick_up4[1]])
+                        .bindPopup(start)
+                        .addTo(map);
+                }
+
+
+                var start = document.getElementById("start").href = "<a href='/start-pick_up-user/" + id_5 + "/'>Start</a>";
+                if (pick_up5.length === 0) {
+                }
+                else {
+                    marker = new L.marker([pick_up5[0], pick_up5[1]])
+                        .bindPopup(start)
+                        .addTo(map);
+                }
+
+                var start = document.getElementById("start").href = "<a href='/start-pick_up-user/" + id_6 + "/'>Start</a>";
+                if (pick_up6.length === 0) {
+                }
+                else {
+                    marker = new L.marker([pick_up6[0], pick_up6[1]])
+                        .bindPopup(start)
+                        .addTo(map);
+                }
+
+                var start = document.getElementById("start").href = "<a href='/start-pick_up-user/" + id_7 + "/'>Start</a>";
+                if (pick_up7.length === 0) {
+                }
+                else {
+                    marker = new L.marker([pick_up7[0], pick_up7[1]])
+                        .bindPopup(start)
+                        .addTo(map);
+                }
+                var start = document.getElementById("start").href = "<a href='/start-pick_up-user/" + id_8 + "/'>Start</a>";
+                if (pick_up8.length === 0) {
+                }
+                else {
+                    marker = new L.marker([pick_up8[0], pick_up8[1]])
+                        .bindPopup(start)
+                        .addTo(map);
+                }
+
+                var start = document.getElementById("start").href = "<a href='/start-pick_up-user/" + id_9 + "/'>Start</a>";
+                if (pick_up9.length === 0) {
+                }
+                else {
+                    marker = new L.marker([pick_up9[0], pick_up9[1]])
+                        .bindPopup(start)
+                        .addTo(map);
+                }
+
+
+                var start = document.getElementById("start").href = "<a href='/start-pick_up-user/" + id_10 + "/'>Start</a>";
+                if (pick_up10.length === 0) {
+                }
+                else {
+                    marker = new L.marker([pick_up10[0], pick_up10[1]])
+                        .bindPopup(start)
+                        .addTo(map);
+                }
+
+                map.locate({ setView: true, maxZoom: 16 });
+            </script>
+            {% endblock %}

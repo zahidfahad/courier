@@ -1,0 +1,305 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    #msg {
+        overflow-y: scroll;
+        height: 430px;
+    }
+
+    #msg1 {
+        overflow-y: scroll;
+        height: 430px;
+    }
+
+    #stylish {
+        word-break: break-all;
+        /* transform: translateX(50%); */
+        width: 100%;
+        margin-bottom: 1rem;
+        padding: 10px;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        border-radius: 7px;
+        color: rgb(28, 28, 31);
+        box-shadow: 5px 10px 5px#ffffff;
+        background-color: rgb(236, 229, 229);
+    }
+
+    #stylish1 {
+        word-break: break-all;
+        /* transform: translateX(50%); */
+        width: 100%;
+        margin-bottom: 1rem;
+        padding: 10px;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        border-radius: 7px;
+        color: rgb(28, 28, 31);
+        box-shadow: 5px 10px 5px#ece6e6;
+        background-color: white;
+    }
+
+    .a-hover {
+        color: rgb(17, 0, 255);
+    }
+
+    #old {
+        position: relative;
+        padding: 1.4rem 4.2rem;
+        padding-right: 3.1rem;
+        font-size: 1.4rem;
+        color: var(--inv);
+        letter-spacing: 1.1rem;
+        text-transform: uppercase;
+        transition: all 500ms cubic-bezier(0.77, 0, 0.175, 1);
+        cursor: pointer;
+        user-select: none;
+        background-color: #C9F7F5;
+        color: rgb(113, 146, 219);
+    }
+
+    #old:before,
+    #old:after {
+        content: '';
+        position: absolute;
+        transition: inherit;
+        z-index: -1;
+    }
+
+    #old:hover {
+        animation: color-change 1s infinite;
+        color: var(--def);
+        transition-delay: .5s;
+        background-color: rgb(231, 205, 157);
+        --def: #96B7C4;
+        --inv: #fff;
+    }
+
+    @keyframes color-change {
+        0% {
+            color: red;
+        }
+
+        50% {
+            color: rgb(47, 0, 255);
+        }
+
+        100% {
+            color: rgb(255, 123, 0);
+        }
+    }
+
+    #old:hover:before {
+        transition-delay: 0s;
+    }
+
+    #old:hover:after {
+        background: var(--inv);
+        transition-delay: .35s;
+    }
+
+    #old:before,
+    #old-top:after {
+        left: 0;
+        height: 0;
+        width: 100%;
+    }
+
+    #old-top:before {
+        bottom: 0;
+        border: 1px solid var(--inv);
+        border-top: 0;
+        border-bottom: 0;
+    }
+
+    #old-top:after {
+        top: 0;
+        height: 0;
+    }
+
+    #old-top:hover:before,
+    #old-top:hover:after {
+        height: 100%;
+    }
+
+    #msg_txt {
+        transform: translateX(10%);
+    }
+
+    #to_rec {
+        margin-left: 5rem !important;
+    }
+
+    .glow-on-hover {
+        width: 70px;
+        height: 37px;
+        border: none;
+        outline: none;
+        color: #fff;
+        background: #111;
+        cursor: pointer;
+        position: relative;
+        z-index: 0;
+        border-radius: 10px;
+        margin-left: 2rem;
+    }
+
+    .glow-on-hover:before {
+        content: '';
+        background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        background-size: 400%;
+        z-index: -1;
+        filter: blur(5px);
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        animation: glowing 20s linear infinite;
+        opacity: 0;
+        transition: opacity .3s ease-in-out;
+        border-radius: 10px;
+    }
+
+    .glow-on-hover:active {
+        color: #000
+    }
+
+    .glow-on-hover:active:after {
+        background: transparent;
+    }
+
+    .glow-on-hover:hover:before {
+        opacity: 1;
+    }
+
+    .glow-on-hover:after {
+        z-index: -1;
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #111;
+        left: 0;
+        top: 0;
+        border-radius: 10px;
+    }
+
+    @keyframes glowing {
+        0% {
+            background-position: 0 0;
+        }
+
+        50% {
+            background-position: 400% 0;
+        }
+
+        100% {
+            background-position: 0 0;
+        }
+    }
+</style>
+
+
+<div class="container">
+    <div class="d-flex align-items-center">
+        <div class="row">
+            <div class="col-md-12">
+                {{form.errors}}
+                <div id="centerzz">
+                    <form class="form" method="POST" action="{%url 'get_complains' %}" id="ajax-post"
+                        style="display: flex;">
+                        {% csrf_token %}
+                        <div style="display: none;">{{form.sender}}</div>
+                        <div id="receiver_txt" id="to_rec">{{form.receiver}}</div>
+                        <div id="msg_txt">{{form.msg}}</div>
+                        <button class="glow-on-hover" type="submit" id="bt">Send</button>
+                    </form>
+                </div>
+
+                <br>
+            </div>
+            <div class="col-md-6" id="msg">
+
+
+            </div>
+
+            <div class="col-md-6" id="msg1">
+                <div class="btn from-top" id="old">marked as read complains</div>
+                {%for i in my_msg%}
+                <div class="flex-wrap" id="stylish1">
+                    <img height="30x" width="30px" src="{{i.sender.user_pic.url}}"><br>
+                    {{i.sender.username|title}}<br>
+                    {{i.msg}}<br>
+                    {{i.sent}}<br>
+                    <i class='fa fa-trash'></i>
+                    <a href="{%url 'delete_complains' i.id%}">Delete</a><br>
+                    <i class="fa fa-user"></i>
+                    <a href="{%url 'profile_visits' i.sender.id%}">profile</a><br><br>
+                </div>
+                {%endfor%}
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    setInterval(function () {
+        $.ajax({
+            method: "GET",
+            url: "get_complains",
+            success: function (data) {
+                console.log(data)
+                $("#msg").empty();
+                $.each(data, function (key, value) {
+                    var a = value.Sender.charAt(0).toUpperCase() + value.Sender.slice(1);
+                    var b = value.Msg;
+                    var c = value.Sent.substring(0, 10)
+                    var Read = value.Read;
+                    var details = "<a  href='profile/visit/gddg447dgdg414ddg1d" + value.Sender_ID + "57dgd5d/'>check user</a>";
+                    var mark = "<a  href='mark_read/" + value.MID + "/'>mark as read</a>";
+                    var del = "<a  href='delete/" + value.MID + "/'>Delete</a>";
+                    if (Read == false) {
+                        $("#msg").append(
+                            "<div ClassName='container darker'><div ClassName='row'> <div ClassName='col-md-8' id='stylish'>" + a + " <br> " + b + "<br>" + c + "<br>" + mark + "<br><i class='fa fa-trash'></i>" + del + "<br><i class='fa fa-user'></i>" + details + "</div></div></div>"
+                        );
+                    }
+                })
+            }
+        })
+
+    }, 1000)
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#id_receiver").select2({
+            placeholder: "receiver",
+            allowClear: true,
+        });
+    });
+</script>
+
+
+<!-- real time posting messages by zhf(zahid hassan fahad) -->
+<script>
+    $(function () {
+        $("#ajax-post").submit(function (event) {
+            event.preventDefault();
+            var Form = $(this);
+            var posting = $.post(Form.attr('action'), Form.serialize());
+            posting.done(function (data) {
+                console.log(data)
+                // success msg by zhf
+                Swal.fire("Message Sent", "Have a nice day !", "success");
+            });
+            posting.fail(function (data) {
+                Swal.fire("Ups", "Something went wrong!", "failure");
+            });
+            var clear = document.getElementById("ajax-post").reset();
+            // clearing select2 field after post by zhf
+            $("#id_receiver").val('').trigger('change')
+        });
+    });
+</script>
+{%endblock%}

@@ -1,0 +1,62 @@
+{% extends '../base.html' %} {% load static %} {% block content %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            <div class="row">
+                <div class="col-10"></div>
+                <div class="">
+                    {% if object.delivery_Status == 'Complete' %}
+                    <a href="{% url 'invoice_generator' object.id %}" class="btn btn-twitter"> <i class="fas fa-file-invoice"></i> Download</a> {% endif %}
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="csm-from-group">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <label>FAQ Type</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {{object.faq_type}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="csm-from-group">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <label>Question</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {{object.question}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <label> Answer</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    {{object.answer}}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

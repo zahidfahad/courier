@@ -1,0 +1,7 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<form action="" method="post" id="Add_wallet_form">
+    {% csrf_token %}
+    <input type="number" id="amount" name="amount">
+    <input type="submit" value="Ok">
+</form>
+{% endblock content%}

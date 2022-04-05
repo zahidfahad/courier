@@ -1,0 +1,23 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            <form method="post">{% csrf_token %}
+                <p>Are you sure you want to delete "{{ object }}"?</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="submit" value="Confirm" class="btn btn-danger">
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{% url 'order_list' %}" class="btn btn-info">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

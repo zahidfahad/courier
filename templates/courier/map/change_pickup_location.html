@@ -1,0 +1,81 @@
+{% extends '../../base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .confirm {
+        position: absolute;
+        z-index: 300;
+        bottom: 0;
+        right: 15px;
+    }
+</style>
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            {% if messages %}
+            <div class="alert alert-custom alert-light-primary fade show mb-5" role="alert">
+                <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                <div class="alert-text">
+                    <p class="messages">
+                        {% for message in messages %}
+                    <p {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                        {{message}}
+                    </p>
+                    {% endfor %}
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+            <div>
+                <h5>Enter Pick Up Location: </h5>
+                <input type="text" class="bksearch">
+                <div class="bklist">
+                </div>
+            </div>
+
+            <div id="map" style="height: 400px;"></div>
+
+            <form action="" method="post">
+                {% csrf_token %}
+                <div style="display: none;">{{form}}</div>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <input class="btn btn-primary confirm" type="submit" value="Confirm">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script
+    src="https://cdn.jsdelivr.net/gh/barikoi/barikoi-js@b6f6295467c19177a7d8b73ad4db136905e7cad6/dist/barikoi.min.js?key:MTM0MjpTTzVSU0hCOFFO"></script>
+<script>
+    var map = L.map('map').setView([51.505, -0.09], 13);
+    // Set up the OSM layer
+    L.tileLayer(
+        'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18
+    }).addTo(map)
+
+    Bkoi.onSelect(function () {
+        // get selected data from dropdown list
+        let selectedPlace = Bkoi.getSelectedData()
+        // center of the map
+        let center = [selectedPlace.latitude, selectedPlace.longitude]
+        var lat = document.getElementsByName("pick_up_latitude").value = selectedPlace.latitude;
+        document.getElementById("id_pick_up_latitude").value = lat;
+        var lng = document.getElementsByName("pick_up_longitude").value = selectedPlace.longitude;
+        document.getElementById("id_pick_up_longitude").value = lng;
+        // Add marker to the map & bind popup
+        map.setView(center, 19)
+        L.marker(center).addTo(map).bindPopup(selectedPlace.address)
+    })
+
+    map.locate({ setView: true, maxZoom: 16 });
+</script>
+
+{% endblock %}

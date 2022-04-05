@@ -1,0 +1,107 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+
+        <!--begin::Container-->
+        <div class="container">
+            <div class="myheading">
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <h2>Refer Type</h2>
+                    </div>
+                    <div class="col-md-6"></div>
+                    {% if request.user.is_superuser %}
+                    <div class="col-md-3 text-right">
+                        <button class="btn btn-info" id="package_btn" data-toggle="modal" data-target="#exampleModalCustomScrollable"><i class="fas fa-thumbtack"></i>Add Refer Type</button>
+
+                        <div class="modal fade" id="exampleModalCustomScrollable" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content" style="width: 400px">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Add a Refer Type</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <i aria-hidden="true" class="ki ki-close"></i>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" style="text-align: left;">
+                                        <div data-scroll="true" data-height="200">
+                                            <form action="{% url 'ReferPriceView'%}" method="post" id="modal_form">
+                                                {% csrf_token %}
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <label>Refer Type</label>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        {{form.refer_type}}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <label>Gift Amount</label>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <input type="text" id="price" name="price">
+                                                    </div>
+                                                </div>
+                                                <br>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary font-weight-bold">Save</button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    {% endif %}
+
+
+                </div>
+            </div>
+
+            <table id="data-table" class="display table table-separate table-head-custom table-checkable" style="width:100%">
+                <thead class="text-center">
+                    <tr>
+                        <th>Refer Type</th>
+                        <th>Price</th>
+                        {% if request.user.is_superuser %}
+                        <th>Action</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+
+                <tbody class="text-center">
+                    {% for entry in data %}
+                    <tr>
+                        <td>{{entry.refer_type}}</td>
+                        <td>{{entry.price}} &#2547;</td>
+                        {% if request.user.is_superuser %}
+                        <td>
+                            <div class="my_action">
+
+                                <a href="{% url 'edit_refer_price' entry.id %}"><i
+                                        class="fas fa-edit text-primary mr-5"></i></a>
+                                <a href="{% url 'delete_refer_price' entry.id %}"><i
+                                            class="fas fa-trash-alt text-primary mr-5"></i></a>
+
+                            </div>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h3>Total Reffer Category : {{total}}</h3>
+        </div>
+    </div>
+</div>
+{% endblock content%}

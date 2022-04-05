@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="description" content="Updates and statistics" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="icon" href="{% static 'assets/media/favicon.ico' %}">
+  <title>E-Courier</title>
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <style>
+    #shadow {
+      margin: auto;
+      width: 50%;
+      transform: translateY(100%);
+    }
+
+    h1 {
+      font-size: 20px;
+    }
+
+    p{
+      text-decoration: underline;
+      color: red;
+    }
+    @media only screen and (max-width: 768px) {
+      #shadow {
+        width: 100%;
+        margin: auto;
+        transform: translateY(100%);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="shadow-lg p-3 mb-5 bg-white rounded" id="shadow">
+          <h1 class="text-center">This code is expired.</h1>
+          <p class="text-center">{{ code }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

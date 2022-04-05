@@ -1,0 +1,167 @@
+{%extends '../base.html'%}
+{%load static%}
+{%block content%}
+<style>
+    .alert {
+        color: #721c24 !important;
+        background-color: #f8d7da !important;
+        border-color: #f5c6cb !important;
+        width: 300px;
+        text-align: center;
+        align-self: center;
+    }
+</style>
+{%if messages%}
+<div class="alert alert-success" id="alert">
+    {% for message in messages %}
+    <li {% if message.tags %} class=" {{ message.tags }} " style="list-style: none;" {% endif %}> <i class="fa fa-times"
+            style="color: red; padding-right: 5px;"></i>{{message }} </li>
+    {% endfor %}
+</div>
+{%endif%}
+<div class="container">
+    <div class="d-flex align-items-center" id="kt_subheader_search">
+        <span class="text-dark-50 font-weight-bold" id="kt_subheader_total"></span>
+        <h3>Drivers | {{drivers_count}}</h3>
+        <form class="ml-5" action="{%url 'search_drivers' %}">
+            <div class="input-group input-group-sm input-group-solid" style="max-width: 175px">
+                <input type="text" class="form-control" id="tags" name="q6" placeholder="Search users..."
+                    value="{{ request.GET.q6 }}" required />
+                <div class="input-group-append">
+                    <button class="btn btn-success" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+        
+    </div>
+</div><br>
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="row">
+            {%for i in ratings%}
+            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b card-stretch">
+                    <!--begin::Body-->
+                    <div class="card-body text-center pt-4">
+                        <!--begin::Toolbar-->
+                        <div class="d-flex justify-content-end">
+                            <div class="dropdown dropdown-inline" data-toggle="tooltip" title="Quick actions"
+                                data-placement="left">
+                                <a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="ki ki-bold-more-hor"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                                    <!--begin::Navigation-->
+                                    <ul class="navi navi-hover">
+
+                                        <li class="navi-separator mb-3 opacity-70"></li>
+                                        <li class="navi-item">
+                                            <a href="#" class="navi-link">
+                                                <span class="navi-text">
+                                                    {%if i.rated_user.is_driver%}
+                                                    <span
+                                                        class="label label-xl label-inline label-light-success">Driver</span>
+                                                    {%elif i.rated_user.is_delivery_man%}
+                                                    <span
+                                                        class="label label-xl label-inline label-light-success">Deliveryman</span>
+                                                    {%elif i.rated_user.is_agent%}
+                                                    <span
+                                                        class="label label-xl label-inline label-light-success">Agent</span>
+                                                    {%elif i.rated_user.is_merchant%}
+                                                    <span
+                                                        class="label label-xl label-inline label-light-success">Merchant</span>
+                                                    {%else%}
+                                                    <span
+                                                        class="label label-xl label-inline label-light-success">Client/User</span>
+                                                    {%endif%}
+                                                </span>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                    <!--end::Navigation-->
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Toolbar-->
+                        <!--begin::User-->
+
+                        <div class="mt-7">
+                            <div class="symbol symbol-circle symbol-lg-75">
+                                <img src="{{i.rated_user.user_pic.url}}" alt="image" />
+                            </div>
+                            <div class="symbol symbol-lg-75 symbol-circle symbol-primary d-none">
+                                <span class="font-size-h3 font-weight-boldest">JB</span>
+                            </div>
+                        </div>
+                        <!--end::User-->
+                        <!--begin::Name-->
+                        <div class="my-2">
+                            <a href="#"
+                                class="text-dark font-weight-bold text-hover-primary font-size-h4">{{i.rated_user.username|title}}</a>
+                        </div>
+                        <!--end::Name-->
+                        <!--begin::Label-->
+
+                        <span
+                            class="label label-inline label-lg label-light-warning btn-sm font-weight-bold">{{i.avg_rating}}</span><br>
+                        <a href="{%url 'acc_approval' user.id %}">
+                            <span
+                                class="label label-inline label-lg label-light-warning btn-sm font-weight-bold">Average
+                                Rating</span>
+                        </a>
+                        <!--end::Label-->
+                        <!--begin::Buttons-->
+                        <div class="mt-9 mb-6">
+                            <a href="{%url 'profile_visits' i.rated_user.id%}">
+                                <i class="fa fa-user"></i>
+                                View Details</a>
+                        </div>
+
+                        <!--end::Buttons-->
+                    </div>
+                    <!--end::Body-->
+                </div>
+                <!--end::Card-->
+            </div>
+            <!--end::Col-->
+            {%endfor%}
+
+        </div>
+        <!--begin::Pagination-->
+			{% if ratings.has_other_pages %}
+			<ul class="pagination">
+			  {% if ratings.has_previous %}
+				<li class="page-item active">
+					<a class="page-link" href="?page={{ ratings.previous_page_number }}">pre</a>
+				</li>
+			  {% else %}
+				<li class="page-item disabled"><span></span></li>
+			  {% endif %}
+			  {% for i in ratings.paginator.page_range %}
+				{% if ratings.number == i %}
+				  <li class="page-item"><span style="z-index: 1; position: relative; display: block;padding: 0.5rem 0.75rem; margin-left: -1px; line-height: 1.25; color: #f7efef; background-color: #F64E60; border: 1px solid #E4E6EF;">{{ i }} <span class="sr-only" >(current)</span></span></li>
+				{% else %}
+				  <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+				{% endif %}
+			  {% endfor %}
+			  {% if ratings.has_next %}
+				<li class="page-item active">
+					<a class="page-link" href="?page={{ ratings.next_page_number }}">Next</a>
+				</li>
+			  {% else %}
+				<li class="page-item disabled"><span></span></li>
+			  {% endif %}
+			</ul>
+		  {% endif %}
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+        $('#alert').remove();
+    }, 5000);
+</script>
+
+{%endblock%}

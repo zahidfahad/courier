@@ -1,0 +1,51 @@
+{% extends '../../base.html' %}
+{% load static %}
+{% block content %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            <input type="text" id="contact" value="{{order.user.contact}}" hidden>
+
+            <div id="map" style="height: 400px;"></div>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div style="display: none;">{{form}}</div>
+                <input style="position: absolute; top: 140px; right: 60px; z-index: 1000;" type="submit" value="Finish"
+                    class="btn btn-primary pt-3 pb-3 pl-6 pr-6 h4">
+            </form>
+            <script
+                src="https://cdn.jsdelivr.net/gh/barikoi/barikoi-js@b6f6295467c19177a7d8b73ad4db136905e7cad6/dist/barikoi.min.js?key:MTM0MjpTTzVSU0hCOFFO"></script>
+            <script>
+                var map = L.map('map').setView([51.505, -0.09], 13);
+                // Set up the OSM layer
+                L.tileLayer(
+                    'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 18
+                }).addTo(map)
+
+                var pick_up_latitude = document.getElementById("id_pick_up_latitude").value;
+                var pick_up_longitude = document.getElementById("id_pick_up_longitude").value;
+                var contact = document.getElementById("contact").value;
+
+                var pickup = [pick_up_latitude, pick_up_longitude]
+                var icon = new L.Icon({
+                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+
+                marker = new L.marker([pickup[0], pickup[1]], {
+                    icon: icon
+                })
+                    .bindPopup("pick up point <br/><a href='tel:" + contact + "'>" + contact + "</a>")
+                    .addTo(map);
+
+                map.locate({ setView: true, maxZoom: 16 });
+            </script>
+
+            {% endblock %}

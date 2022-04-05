@@ -1,0 +1,45 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+
+        <!--begin::Container-->
+        <div class="container">
+            <div class="myheading">
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <h2>Refer History</h2>
+                    </div>
+
+                </div>
+            </div>
+
+            <table id="data-table" class="display table table-separate table-head-custom table-checkable" style="width:100%">
+                <thead class="text-center">
+                    <tr>
+                        <th>Date</th>
+                        <th>User</th>
+                        <th>Refer Type</th>
+                        <th>Got Bonus</th>
+                    </tr>
+                </thead>
+
+                <tbody class="text-center">
+                    {% for entry in data %}
+                    <tr>
+                        <td>{{entry.created_on}}</td>
+                        <td>{{entry.user.username}}</td>
+                        <td>{{entry.type}}</td>
+                        <td>{{entry.amount}} &#2547;</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- <h3>Total Reffer Category : {{total}}</h3> -->
+        </div>
+    </div>
+</div>
+{% endblock content%}

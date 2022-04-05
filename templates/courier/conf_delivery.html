@@ -1,0 +1,35 @@
+{% extends '../base.html' %} {% load static %} {% block content %}
+<div class="d-flex flex-column flex-root">
+    <div class="d-flex flex-center bgi-size-cover bgi-no-repeat flex-row-fluid" style="background-image: url({%static 'assets/media/bg/bg-2.jpg'%});">
+        <div class="login-form text-center text-white p-7 position-relative overflow-hidden">
+            <!--begin::Login forgot password form-->
+            <div class="login-forgot">
+                <div class="mb-20">
+                    <h3 class="opacity-60 font-weight-normal">Delivered an order ?</h3>
+                    <p class="opacity-20">An OTP is sent to reciver email</p>
+                    <p class="opacity-40">Enter OTP to finish Delivery </p>
+
+                </div>
+                <form method="post" class="form">
+                    {%csrf_token%} {% if form.errors %} {% for field in form %} {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %} {% endfor %} {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %} {% endif %}
+                    <div class="form-group mb-10">
+                        <input class="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8" type="number" placeholder="Enter OTP" name="otp" autocomplete="off" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-pill btn-primary opacity-90 px-15 py-3 m-2" value="Done">
+                    </div>
+                </form>
+            </div>
+            <!--end::Login forgot password form-->
+        </div>
+    </div>
+</div>
+{% endblock %}

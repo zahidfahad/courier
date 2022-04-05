@@ -1,0 +1,107 @@
+{% extends '../../base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .confirm {
+        position: absolute;
+        z-index: 300;
+        bottom: 0;
+        right: 15px;
+    }
+</style>
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            {% if request.user.is_superuser and delivery.approve_change_delivery_address is False %}
+            <a href="{% url 'approve_change' delivery.id  %}">Accept</a>
+            {% endif %}
+
+            <div>
+                <h5>Enter Delivery Location: </h5>
+                <input type="text" class="bksearch">
+                <div class="bklist">
+                </div>
+            </div>
+
+            <div id="map" style="height: 400px;"></div>
+
+            <form action="" method="post">
+                {% csrf_token %}
+                <div style="display: none;">{{form.as_p}}</div>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        {% if request.user.is_user and delivery.confirm_change_delivery_address is False %}
+                        <input class="btn btn-primary confirm" type="submit" value="Change">
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script
+    src="https://cdn.jsdelivr.net/gh/barikoi/barikoi-js@b6f6295467c19177a7d8b73ad4db136905e7cad6/dist/barikoi.min.js?key:MTM0MjpTTzVSU0hCOFFO"></script>
+<script>
+    var map = L.map('map').setView([51.505, -0.09], 13);
+    // Set up the OSM layer
+    L.tileLayer(
+        'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18
+    }).addTo(map)
+
+    var delivery_latitude = document.getElementById("id_delivery_latitude").value;
+    var delivery_longitude = document.getElementById("id_delivery_longitude").value;
+
+    var change_latitude = document.getElementById("id_change_latitude").value;
+    var change_longitude = document.getElementById("id_change_longitude").value;
+
+    var Icon2 = L.divIcon({
+        html: `<span class="svg-icon svg-icon-primary svg-icon-3x"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="24" width="24" height="0"/><path d="M5,10.5 C5,6 8,3 12.5,3 C17,3 20,6.75 20,10.5 C20,12.8325623 17.8236613,16.03566 13.470984,20.1092932 C12.9154018,20.6292577 12.0585054,20.6508331 11.4774555,20.1594925 C7.15915182,16.5078313 5,13.2880005 5,10.5 Z M12.5,12 C13.8807119,12 15,10.8807119 15,9.5 C15,8.11928813 13.8807119,7 12.5,7 C11.1192881,7 10,8.11928813 10,9.5 C10,10.8807119 11.1192881,12 12.5,12 Z" fill="#000000" fill-rule="nonzero"/></g></svg></span>`,
+        bgPos: [10, 10],
+        iconAnchor: [20, 37],
+        popupAnchor: [0, -37],
+        className: 'leaflet-marker'
+    });
+
+    var Icon1 = L.divIcon({
+        html: `<span class="svg-icon svg-icon-warning svg-icon-3x"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="24" width="24" height="0"/><path d="M5,10.5 C5,6 8,3 12.5,3 C17,3 20,6.75 20,10.5 C20,12.8325623 17.8236613,16.03566 13.470984,20.1092932 C12.9154018,20.6292577 12.0585054,20.6508331 11.4774555,20.1594925 C7.15915182,16.5078313 5,13.2880005 5,10.5 Z M12.5,12 C13.8807119,12 15,10.8807119 15,9.5 C15,8.11928813 13.8807119,7 12.5,7 C11.1192881,7 10,8.11928813 10,9.5 C10,10.8807119 11.1192881,12 12.5,12 Z" fill="#000000" fill-rule="nonzero"/></g></svg></span>`,
+        bgPos: [10, 10],
+        iconAnchor: [20, 37],
+        popupAnchor: [0, -37],
+        className: 'leaflet-marker'
+    });
+
+    marker = new L.marker([delivery_latitude, delivery_longitude], {
+        icon: Icon1
+    })
+        .bindPopup('Old Location')
+        .addTo(map);
+
+    marker = new L.marker([change_latitude, change_longitude], {
+        icon: Icon2
+    })
+        .bindPopup('New Location')
+        .addTo(map);
+
+    Bkoi.onSelect(function () {
+        // get selected data from dropdown list
+        let selectedPlace = Bkoi.getSelectedData()
+        // center of the map
+        let center = [selectedPlace.latitude, selectedPlace.longitude]
+        var lat = document.getElementsByName("change_latitude").value = selectedPlace.latitude;
+        document.getElementById("id_change_latitude").value = lat;
+        var lng = document.getElementsByName("change_longitude").value = selectedPlace.longitude;
+        document.getElementById("id_change_longitude").value = lng;
+        // Add marker to the map & bind popup
+        map.setView(center, 19)
+        L.marker(center).addTo(map).bindPopup(selectedPlace.address)
+    })
+
+    map.locate({ setView: true, maxZoom: 16 });
+</script>
+
+{% endblock %}

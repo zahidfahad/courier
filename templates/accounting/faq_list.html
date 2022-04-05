@@ -1,0 +1,58 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+
+        <!--begin::Container-->
+        <div class="container">
+            <div class="myheading">
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <h2>FAQ's</h2>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <table id="data-table" class="display table table-separate table-head-custom table-checkable" style="width:100%">
+                <thead class="text-center">
+                    <tr>
+                        <th>FAQ Type</th>
+                        <th>Question</th>
+                        <th>Answer</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% for object in object_list %}
+                    <tr>
+                        <td>{{ object.faq_type }}</td>
+                        <td>{{ object.question }}</td>
+                        <td>{{ object.answer }}</td>
+                        <td>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <a href="{% url 'FAQDetails' object.id %}" data-toggle="tooltip" data-placement="top" title="Details"><i
+                                            class="fas fa-clipboard-list text-hover-primary mr-2"></i></a>
+                                </div>
+                                <div class="col-md-2">
+                                    <a href="{% url 'FAQUpdate' object.id %}" data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                            class="fas fa-edit text-hover-primary mr-2"></i></a>
+                                </div>
+                                <div class="col-md-2 mt-2">
+                                    <a href="{% url 'FAQDelete' object.id %}" data-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt text-hover-primary mr-2"></i></a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content%}

@@ -1,0 +1,166 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    input {
+        width: 100%;
+        border-radius: 1rem;
+        border-color: grey;
+        border-width: 1px;
+    }
+
+    #alert-warning {
+        width: 20%;
+        transform: translateX(200%);
+        text-align: center;
+    }
+</style>
+<div id="emailsame">
+
+</div>
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <div class="card card-custom gutter-b">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h3 class="card-label">
+                                    Hi {{request.user.username}},
+                                    {%if not request.user.is_superuser%}
+                                    <small>This action will need admin verification and your account will not be
+                                        activated untill admin
+                                        verifies
+                                        your
+                                        request</small>
+                                    {% endif %}
+                                    <strong id="alert">{{msg}}
+                                        {%if form.errors%}
+                                        {{form.errors}}
+                                        {%endif%}
+                                    </strong>
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" action="{% url 'change_email' %}" id="myform">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="email">Email:</label><br>                                  
+                                    <input type="email" name="email" id="email" required oninput="change()"
+                                        ondrop="return false;" autocomplete="off" />
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if request.user.is_superuser %}
+<script>
+    $(function () {
+        $("#myform").submit(function (event) {
+            event.preventDefault();
+            var Form = $(this);
+            var posting = $.post(Form.attr('action'), Form.serialize());
+            posting.done(function (data) {
+                console.log(data)
+                // success msg by zhf
+                Swal.fire("Email Changed", "Have a nice day sir!", "success");
+            });
+            posting.fail(function (data) {
+                Swal.fire("Ups", "Something went wrong!", "failure");
+            });
+            var clear = document.getElementById("myform").reset();
+        });
+    });
+</script>
+{%endif%}
+
+
+<script>
+    $("#email").keyup(function () {
+        var email = $(this).val();
+        console.log(email)
+        if (event.keyCode != 13) {
+            $.ajax({
+                url: '/get_email/',
+                data: {
+                    'email': email
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.is_taken) {
+                        document.getElementById("myform").reset();
+                        var show = "<div class='alert alert-warning' id='alert-warning'>" + email + "<br>Email already exists.Your Form field has been reset</div>";
+                        $("#emailsame").empty();
+                        $("#emailsame").append(
+                            "<div ClassName='container' id='username_show_style'>" + show + "</div>"
+                        );
+                        var clear = document.getElementById("myform").reset();
+                    }
+                    else if (data.is_taken == false) {
+                        var show = "";
+                        $("#emailsame").empty();
+                        $("#emailsame").append(
+                            "<div ClassName='container' id='username_show_style2'>" + show + "</div>"
+                        );
+                    }
+
+                }
+            });
+        }
+    });
+</script>
+
+
+<script>
+    $("#email").change(function () {
+        var email = $(this).val();
+        console.log(email)
+        $.ajax({
+            url: '/get_email/',
+            data: {
+                'email': email
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.is_taken) {
+                    document.getElementById("myform").reset();
+                    var show = "<div class='alert alert-warning' id='alert-warning'>" + email + "<br>Email already exists.Your Form field has been reset</div>";
+                    $("#emailsame").empty();
+                    $("#emailsame").append(
+                        "<div ClassName='container' id='username_show_style'>" + show + "</div>"
+                    );
+                    var clear = document.getElementById("myform").reset();
+                }
+                else if (data.is_taken == false) {
+                    var show = "";
+                    $("#emailsame").empty();
+                    $("#emailsame").append(
+                        "<div ClassName='container' id='username_show_style2'>" + show + "</div>"
+                    );
+                }
+
+            }
+        });
+    });
+</script>
+
+<script>
+    setTimeout(function () {
+        $('#alert').remove();
+    }, 5000);
+</script>
+
+{%endblock%}

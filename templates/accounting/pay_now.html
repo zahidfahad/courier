@@ -1,0 +1,23 @@
+{% extends '../base.html' %} {% load static %} {% block content %}
+<div class="d-flex flex-column-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 offset-md-4">
+                <div class="my_custom_card">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <label style="color: #100a40;">Choose a Payment Method:</label>
+
+                        <select name="method_type" id="method_type">
+                            <option value="Cash">Cash</option>
+                            <option value="Online">Online</option>
+                            <option value="Wallet">Wallet</option>
+                        </select>
+                        <input type="submit" class="btn btn-bg-success mt-4" id="paynow_sub" value="Ok">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

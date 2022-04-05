@@ -1,0 +1,39 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+{% load crispy_forms_tags %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="d-flex flex-column-fluid">
+        <div class="container">
+            <form action="" method="post" class="form">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        {{form.inside_dhaka|as_crispy_field}}
+                    </div>
+                    <div class="col-md-6">
+                        {{form.dhaka_suburb|as_crispy_field}}
+                    </div>
+                    <div class="col-md-6">
+                        {{form.outside_dhaka|as_crispy_field}}
+                    </div>
+                    <div class="col-md-6">
+                        <div id="div_id_extra" class="form-group">
+                            <label for="id_extra" class=" requiredField">
+                                Extra Price(after 1 kg)<span class="asteriskField">*</span>
+                            </label>
+                            <div class="">
+                                <input type="text" name="extra" maxlength="100" class="textinput textInput form-control"
+                                    required="" id="id_extra">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5"></div>
+                    <div class="col-md-5"></div>
+                    <div class="col-md-2"><input type="submit" class="btn btn-success"></div>
+                </div>
+        </div>
+    </div>
+    </form>
+</div>
+</div>
+</div>
+{% endblock %}

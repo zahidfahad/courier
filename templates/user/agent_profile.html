@@ -1,0 +1,629 @@
+{% extends '../base.html' %} {% load static %} {% block content %}
+
+<style>
+    #txt {
+        padding-left: 5px;
+        color: rgb(46, 48, 51) !important;
+        font-size: 15px;
+        text-shadow: rgb(48, 128, 182);
+        font-style: inherit;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
+    
+    .glow-on-hover {
+        width: 70px;
+        height: 30px;
+        border: none;
+        outline: none;
+        color: #fff;
+        background: #111;
+        cursor: pointer;
+        position: relative;
+        z-index: 0;
+        border-radius: 10px;
+    }
+    
+    .glow-on-hover:before {
+        content: '';
+        background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        background-size: 400%;
+        z-index: -1;
+        filter: blur(5px);
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        animation: glowing 20s linear infinite;
+        opacity: 0;
+        transition: opacity .3s ease-in-out;
+        border-radius: 10px;
+    }
+    
+    .glow-on-hover:active {
+        color: #000
+    }
+    
+    .glow-on-hover:active:after {
+        background: transparent;
+    }
+    
+    .glow-on-hover:hover:before {
+        opacity: 1;
+    }
+    
+    .glow-on-hover:after {
+        z-index: -1;
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #111;
+        left: 0;
+        top: 0;
+        border-radius: 10px;
+    }
+    
+    @keyframes glowing {
+        0% {
+            background-position: 0 0;
+        }
+        50% {
+            background-position: 400% 0;
+        }
+        100% {
+            background-position: 0 0;
+        }
+    }
+    
+    #modal-body {
+        overflow-y: scroll;
+        height: 300PX;
+        width: 500PX;
+    }
+    
+    #admin_msg_btn {
+        width: 70px;
+        height: 37px;
+        border: none;
+        outline: none;
+        color: #fff;
+        background: #111;
+        cursor: pointer;
+        position: relative;
+        z-index: 0;
+        border-radius: 10px;
+        margin-left: 2rem;
+    }
+    
+    #admin_msg_btn:before {
+        content: '';
+        background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        background-size: 400%;
+        z-index: -1;
+        filter: blur(5px);
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        animation: glowing 20s linear infinite;
+        opacity: 0;
+        transition: opacity .3s ease-in-out;
+        border-radius: 10px;
+    }
+    
+    #admin_msg_btn:active {
+        color: #000
+    }
+    
+    #admin_msg_btn:active:after {
+        background: transparent;
+    }
+    
+    #admin_msg_btn:hover:before {
+        opacity: 1;
+    }
+    
+    #admin_msg_btn:after {
+        z-index: -1;
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #111;
+        left: 0;
+        top: 0;
+        border-radius: 10px;
+    }
+    
+    @keyframes glowing {
+        0% {
+            background-position: 0 0;
+        }
+        50% {
+            background-position: 400% 0;
+        }
+        100% {
+            background-position: 0 0;
+        }
+    }
+    
+    #aid {
+        background-color: white;
+        color: black;
+        border: 2px solid teal;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 15px;
+    }
+    
+    #aid:hover {
+        background-color: teal;
+        color: white;
+    }
+
+    :root {
+        --border-size: 0.125rem;
+        --duration: 250ms;
+        --ease: cubic-bezier(0.215, 0.61, 0.355, 1);
+        --font-family: monospace;
+        --color-primary: white;
+        --color-secondary: black;
+        --color-tertiary: dodgerblue;
+        --shadow: rgba(0, 0, 0, 0.1);
+        --space: 1rem;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .multi-button {
+        display: flex;
+        width: 30%;
+        box-shadow: var(--shadow) 4px 4px;
+        transform: translateX(20%);
+    }
+
+    .multi-button button {
+        flex-grow: 1;
+        cursor: pointer;
+        position: relative;
+        padding:
+            calc(var(--space) / 1.125) var(--space) var(--space);
+        border: teal;
+        color: var(--color-secondary);
+        background-color: var(--color-primary);
+        font-size: 1rem;
+        font-family: var(--font-family);
+        text-transform: uppercase;
+        text-shadow: var(--shadow) 2px 2px;
+        transition: flex-grow var(--duration) var(--ease);
+    }
+
+    .multi-button button+button {
+        border-left: teal;
+        margin-left: calc(var(--border-size) * -1);
+    }
+
+    .multi-button button:hover,
+    .multi-button button:focus {
+        flex-grow: 2;
+        color: white;
+        outline: none;
+        text-shadow: none;
+        background-color: teal;
+    }
+
+    .multi-button button:focus {
+        outline: var(--border-size) dashed var(--color-primary);
+        outline-offset: calc(var(--border-size) * -3);
+    }
+
+    .multi-button:hover button:focus:not(:hover) {
+        flex-grow: 1;
+        color: var(--color-secondary);
+        background-color: var(--color-primary);
+        outline-color: var(--color-tertiary);
+    }
+
+    .multi-button button:active {
+        transform: translateY(var(--border-size));
+    }
+
+    #ataggg{
+        color: black;
+    }
+    #ataggg:hover{
+        color: white;
+    }
+
+    @media (min-width: 992px) {
+    .content {
+        padding: 0;
+    }
+}
+
+    @media (max-width: 991.98px) {
+        .content {
+            padding: 0;
+        }
+    }
+</style>
+
+
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Subheader-->
+    <div class="subheader py-3 py-lg-8 subheader-transparent" id="kt_subheader">
+        <div class="container d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+            <!--begin::Info-->
+            <div class="d-flex align-items-center mr-1">
+                <!--begin::Page Heading-->
+                <div class="d-flex align-items-baseline flex-wrap mr-5">
+                    <!--begin::Page Title-->
+                    <h2 class="d-flex align-items-center text-dark font-weight-bold my-1 mr-3">
+                        <a href="{%url 'change_email' %}" id='aid'>Change Email</a>
+                    </h2>
+                </div>
+                <!--end::Page Heading-->
+            </div>
+            <!--end::Info-->
+            <!--begin::Toolbar-->
+            <div class="col-md-12 offset-md-6">
+                <div class="multi-button">
+                    <button id="reffer_button" onclick="reffer()">Refer a Friend</button>
+                   <a href="{%url 'edit_profile_agent' request.user.id %}" id="ataggg"> <button id="ataggg">Edit Profile</button></a>
+                </div>
+            </div>
+            <div class="d-flex align-items-center flex-wrap">
+                <!--begin::Button-->
+                
+            </div>
+            <!--end::Toolbar-->
+        </div>
+    </div>
+    <!--end::Subheader-->
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            <!--begin::Card-->
+            <div class="card card-custom gutter-b">
+                <div class="card-body">
+                    <!--begin::Details-->
+                    {%for detail in user%}
+                    <div class="d-flex mb-9">
+                        <!--begin: Pic-->
+                        <div class="flex-shrink-0 mr-7 mt-lg-0 mt-3">
+                            <div class="symbol symbol-50 symbol-lg-120">
+                                <img src="{{detail.user_pic.url}}" alt="image" />
+                            </div>
+                            <div class="symbol symbol-50 symbol-lg-120 symbol-primary d-none">
+                                <span class="font-size-h3 symbol-label font-weight-boldest">JM</span>
+                            </div>
+                        </div>
+                        <!--end::Pic-->
+                        <!--begin::Info-->
+                        <div class="flex-grow-1">
+                            <!--begin::Title-->
+                            <div class="d-flex justify-content-between flex-wrap mt-1">
+                                <div class="d-flex mr-3">
+                                    <a href="#" class="text-dark-75 text-hover-primary font-size-h5 font-weight-bold mr-3">{{detail.username}}</a>
+                                    <a href="#">
+                                        <i class="flaticon2-correct text-success font-size-h5"></i>
+                                    </a>
+                                </div>
+                                <div class="my-lg-0 my-3">
+
+                                    {%if request.user.is_agent%}
+                                    <!-- Button trigger modal -->
+                                    <button id="admin_msg_btn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                                        <I class="fa fa-envelope"></I>
+                                    </button> {%endif%}
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLongTitle">Messages</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body" id="modal-body">
+
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <!--end::Title-->
+                            <!--begin::Content-->
+                            <div class="d-flex flex-wrap justify-content-between mt-1">
+                                <div class="d-flex flex-column flex-grow-1 pr-8">
+                                    <div class="d-flex flex-wrap mb-4">
+                                        <a href="#" class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                                            <i class="flaticon2-new-email mr-2 font-size-lg"></i>{{detail.email}}</a>
+                                        <a href="#" class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                                            <i class="flaticon2-calendar-3 mr-2 font-size-lg"></i>Agent</a>
+                                        <a href="#" class="text-dark-50 text-hover-primary font-weight-bold">
+                                            <i class="flaticon2-placeholder mr-2 font-size-lg"></i>{{detail.city}}</a>
+                                    </div>
+                                    <span class="font-weight-bold text-dark-50">{{detail.quote}}</span>
+                                    <span class="font-weight-bold text-dark-50">Team E-Courier's Agent</span>
+                                </div>
+                            </div>
+                            <!--end::Content-->
+                        </div>
+                        {%endfor%}
+                        <!--end::Info-->
+                    </div>
+                    <!--end::Details-->
+                    <div class="separator separator-solid"></div>
+                    <!--begin::Items-->
+                    <div class="d-flex align-items-center flex-wrap mt-8">
+                        <!--begin::Item-->
+
+                    </div>
+                    <!--begin::Items-->
+                </div>
+            </div>
+            <!--end::Card-->
+            <!--begin::Row-->
+            <div class="row">
+                <div class="col-lg-8">
+                    <!--begin::Advance Table Widget 2-->
+                    <div class="card card-custom card-stretch gutter-b">
+                        <!--begin::Header-->
+                        <div class="card-header border-0 pt-5">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label font-weight-bolder text-dark">Informations</span>
+                                <span class="text-muted mt-3 font-weight-bold font-size-sm"></span>
+                            </h3>
+                            <div class="card-toolbar">
+                                <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+
+                                </ul>
+                            </div>
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Body-->
+                        <div class="card-body pt-2 pb-0 mt-n3">
+                            <div class="tab-content mt-5" id="myTabTables11">
+                                <!--begin::Tap pane-->
+                                <div class="table-responsive">
+                                    <table class="table table-striped custom-table">
+                                        <tbody>
+                                            <tr>
+                                                <th>Contact's</th>
+
+                                                <th>Email</th>
+                                            </tr>
+                                            {%for i in user%}
+                                            <tr>
+                                                <td id="td1">
+                                                    {% if i.contact %} {{i.contact}}
+                                                    <br> {% endif %} {% if i.contact2 %} {{i.contact2}}
+                                                    <br> {% endif %} {% if i.contact3 %} {{i.contact3}}
+                                                    <br> {% endif %} {% if i.contact4 %} {{i.contact4}} {% endif %}
+                                                </td>
+                                                <td id="td5">{{i.email}}</td>
+                                            </tr>
+                                            {%endfor%}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <table class="table table-striped custom-table">
+                                    <tbody>
+                                        <tr>
+                                            <th>Address</th>
+                                            <th>City</th>
+                                        </tr>
+                                        {%for i in user%}
+                                        <tr>
+                                            <td id="td1">{{i.address}}</td>
+                                            <td id="td5">{{i.city}}</td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <table class="table table-striped custom-table">
+                                <tbody>
+                                    <tr>
+                                        <th>Delivery Success</th>
+                                        <th>Pending Delivery</th>
+                                        <th>Delivering</th>
+                                    </tr>
+                                    <tr>
+                                        <td>{{complete_count}} <i class="fa fa-check" style="color: rgb(134, 233, 134)"></i>
+                                        </td>
+                                        <td>{{pending_count}} <i class="fas fa-times" style="color: red;"></i></td>
+                                        <td>{{delivering_count}} <i class="fas fa-clock" style="color: rgb(26, 29, 27);"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--end::Body-->
+                    </div>
+                    <!--end::Advance Table Widget 2-->
+                </div>
+                <div class="col-lg-4">
+                    <!--begin::Mixed Widget 14-->
+                    <div class="card card-custom card-stretch gutter-b">
+                        <!--begin::Header-->
+                        <div class="card-header border-0 pt-5">
+                            <h3 class="card-title font-weight-bolder">Driver/Delivery</h3>
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Body-->
+                        <div class="vertical-menu" style="overflow-y: scroll; height:400px;">
+                            {%for user in user_list%} {%if user.is_delivery_man or user.is_driver is True%}
+                            <a href="{%url 'profile_visits' user.id%}" id="txt"><img height="50px" width="50" src="{{user.user_pic.url}}" style="border-radius: 7PX;"> {{user.username|title}}
+
+                                <br> {%if user.is_driver%}
+                                <small style="padding-left: 2rem; "><i class="fa fa-wheel"></i> Driver</small><br> {%endif%} {%if user.is_delivery_man%}
+                                <small style="padding-left: 2rem;">Deliveryman</small><br> {%endif%}
+                                <hr>
+                            </a>
+                            {%endif%} {%endfor%}
+                        </div>
+                        <!--end::Body-->
+                    </div>
+                    <!--end::Mixed Widget 14-->
+                </div>
+            </div>
+            <!--end::Row-->
+            <!--begin::Row-->
+            <div class="row">
+                <div class="col-lg-6">
+                    <!--begin::Charts Widget 4-->
+                    <div class="card card-custom card-stretch gutter-b">
+                        <!--begin::Header-->
+                        <div class="card-header h-auto border-0">
+                            <div class="card-title py-5">
+                                <h3 class="card-label">
+                                    <span class="d-block text-dark font-weight-bolder">Complain Box</span>
+                                    <span class="d-block text-muted mt-2 font-size-sm">Dear user,<br> We always try our
+                                        best to give the best service.If you feel something <br> needs to be fixed
+                                        please feel free to leave a message.<br><br><strong>E-Courier</strong></span>
+                                </h3>
+                            </div>
+                            <div class="card-toolbar">
+                                <ul class="nav nav-pills nav-pills-sm nav-dark-75" role="tablist">
+
+                                </ul>
+                            </div>
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Body-->
+                        {% if request.user.is_agent %}
+                        <div class="card-body">
+                            <div class="table-responsive"><br>
+                                <a href="#">Complain any issue</a> <br><br>
+                                <form method="post" action="{% url 'complain_box' id %}" id="ajax-post">
+                                    {%csrf_token%}
+                                    <input class="w3-input" type="text" name="msg" id="msg" required></p><br>
+                                    <button class="glow-on-hover" type="submit">Send</button>
+                                </form>
+
+                            </div>
+                        </div>
+                        {%else%}
+                        <h1 style="margin-left: 1.5rem;">You can Complain From Your own profile</h1>
+                        {%endif%}
+                        <!--end::Body-->
+                    </div>
+                    <!--end::Charts Widget 4-->
+                </div>
+                <div class="col-lg-6">
+                    <!--begin::List Widget 11-->
+                    <div class="card card-custom card-stretch gutter-b">
+                        <!--begin::Header-->
+                        <div class="card-header border-0">
+                            <h3 class="card-title font-weight-bolder text-dark">Recent Deliveries</h3>
+                            <div class="card-toolbar">
+
+                            </div>
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Body-->
+                        <div class="card-body pt-0">
+                            <!--begin::Item-->
+                            <div class="d-flex align-items-center mb-9 bg-light-warning rounded p-5">
+                                <!--begin::Icon-->
+
+                                <!--end::Icon-->
+                                <!--begin::Title-->
+                                <div class="d-flex flex-column flex-grow-1 mr-2" style="overflow-y: scroll; height:200px;">
+                                    {%if recent_del%} {%for i in recent_del%}
+                                    <a href="#" class="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1">Receiver:
+                                        {{i.receiver}},{{i.receiver_Address}}</a>
+                                    <span class="text-muted font-weight-bold">{{i.payment}}</span>
+                                    <span class="font-weight-bolder text-warning py-1 font-size-lg">{{i.delivery_Status}}</span>
+                                    <hr> {%endfor%} {%else%}
+                                    <a href="#" class="font-weight-bold text-dark-75 text-hover-primary font-size-lg mb-1">No
+                                        Deliveries Yet</a>
+                                    <span class="text-muted font-weight-bold"></span>
+                                    <span class="font-weight-bolder text-warning py-1 font-size-lg"></span>
+                                    <hr> {%endif%}
+                                </div>
+                            </div>
+                            <!--end::Item-->
+
+                        </div>
+                        <!--end::Body-->
+                    </div>
+                    <!--end::List Widget 11-->
+                </div>
+            </div>
+            <!--end::Row-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+<script>
+    setInterval(function() {
+        $.ajax({
+            method: "GET",
+            url: "/get_complains",
+            success: function(data) {
+                console.log(data)
+                $("#modal-body").empty();
+                $.each(data, function(key, value) {
+                    var a = value.Sender.charAt(0).toUpperCase() + value.Sender.slice(1);
+                    var b = value.Msg;
+                    var c = value.Sent.substring(0, 10)
+                    var Read = value.Read;
+                    console.log(data)
+                    var del = "<a  href='/delete/" + value.MID + "/'>Delete</a>";
+
+                    $("#modal-body").append(
+                        "<div ClassName='container darker'>" + a + " <br> " + b + "<br>" + c + "<br><i class='fa fa-trash'></i>" + del + "<hr><br></div>"
+                    );
+
+                })
+            }
+        })
+
+    }, 1000)
+</script>
+
+
+<!-- <script>
+    $('ajax-post').on('submit',function(){
+           alert('submitted');
+});
+</script> -->
+<script>
+    $(function() {
+        $("#ajax-post").submit(function(event) {
+            event.preventDefault();
+            var Form = $(this);
+            var posting = $.post(Form.attr('action'), Form.serialize());
+            var clear = document.getElementById("ajax-post").reset();
+            posting.done(function(data) {
+                console.log(data)
+                Swal.fire("Message Sent", "Have a nice day sir!", "success");
+            });
+            posting.fail(function(data) {
+                Swal.fire("Ups", "Something went wrong!", "failure");
+            });
+        });
+    });
+</script>
+
+
+{%endblock%}

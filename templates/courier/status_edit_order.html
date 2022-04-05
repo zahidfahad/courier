@@ -1,0 +1,40 @@
+{% extends '../base.html' %} {% load static %} {% block content %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container">
+            <form method="post">
+                {% csrf_token %}
+                <div class="card-body">
+                    <!--begin::Form-->
+                    <div class="row">
+                        <div class="col-xl-2"></div>
+                        <div class="col-xl-8">
+                            <div class="my-5">
+                                <div class="form-group row">
+                                    <div class="col-9">
+                                        <label>Choose Status:</label>
+
+                                        <select name="delivery_Status" id="delivery_Status">
+                                            {% for i in arr %}
+                                          <option value="{{i}}">{{i}}</option>
+                                          {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <input type="submit" class="btn btn-info" value="Change Status">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-2"></div>
+                    </div>
+                    <!--end::Form-->
+                </div>
+        </div>
+        </form>
+    </div>
+</div>
+</div>
+{% endblock %}
